@@ -14,6 +14,7 @@ type ActionCard = {
     description: string;
     buttonLabel: string;
     icon: LucideIcon;
+    href : string;
 };
 
 const actionCards: ActionCard[] = [
@@ -22,18 +23,21 @@ const actionCards: ActionCard[] = [
         description: "Gerencie seus produtos e acompanhe as validades",
         buttonLabel: "Acessar estoque",
         icon: Refrigerator,
+        href : "/"
     },
     {
         title: "Editar Perfil",
         description: "Atualize suas informações pessoais e preferências",
         buttonLabel: "Editar Perfil",
         icon: CircleUserRound,
+        href : "/"
     },
     {
         title: "Sugestão de Receitas",
         description: "Receba receitas baseadas nos itens do seu estoque",
         buttonLabel: "Ver Receitas",
         icon: ScrollText,
+        href : "/"
     },
 ];
 
