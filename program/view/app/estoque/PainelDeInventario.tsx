@@ -99,7 +99,7 @@ const initialInventory: InventoryItem[] = [
 
 const deleteIcons = [vector4, vector5, vector7, vector8, vector10, vector12];
 
-export const PainelDeInventario = (): JSX.Element => {
+const PainelDeInventario = (): JSX.Element => {
     const [inventory, setInventory] = useState<InventoryItem[]>(initialInventory);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [productName, setProductName] = useState("");
@@ -369,3 +369,5 @@ export const PainelDeInventario = (): JSX.Element => {
         </>
     );
 };
+
+export default PainelDeInventario

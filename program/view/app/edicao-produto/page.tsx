@@ -3,7 +3,6 @@ import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import image from "./image.svg";
 import leafAccentIllustration from "./leaf-accent-illustration.png";
-import line from "./line.svg";
 import vector from "./vector.svg";
 import vector2 from "./vector-2.svg";
 import vector4 from "./vector-4.svg";
@@ -239,12 +238,6 @@ const TelaEdicaoProduto = (): JSX.Element => {
                                     Excluir Produto
                                 </span>
                             </button>
-                            <Image
-                                className="relative self-stretch w-full h-px object-cover"
-                                alt=""
-                                aria-hidden="true"
-                                src={line}
-                            />
                             <div className="inline-flex items-center gap-1.5 px-3 py-2 relative flex-[0_0_auto] bg-[#e8efe9] rounded-md">
                                 <span className="relative w-3.5 h-3.5">
                                     <Image
