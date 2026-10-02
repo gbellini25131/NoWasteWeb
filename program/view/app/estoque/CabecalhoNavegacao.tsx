@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import vector15 from "./vector-15.svg";
 
-export const CabecalhoNavegacao = (): JSX.Element => {
+const CabecalhoNavegacao = (): JSX.Element => {
     return (
         <header className="flex justify-between px-20 py-6 self-stretch w-full bg-transparent items-center relative flex-[0_0_auto]">
             <Link
@@ -39,3 +39,5 @@ export const CabecalhoNavegacao = (): JSX.Element => {
         </header>
     );
 };
+
+export default CabecalhoNavegacao

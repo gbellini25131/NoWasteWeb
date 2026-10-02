@@ -1,14 +1,18 @@
+'use client';
+
 import { JSX, useState } from "react";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import image1 from "./image.png";
 import image from "./image.svg";
-import leafAccentIllustration from "./leaf-accent-illustration.png";
+import folha from "../../public/folha.png";
 import line from "./line.svg";
 import recipePhoto from "./recipe-photo.png";
 import recipePhoto2 from "./recipe-photo-2.png";
 import vector from "./vector.svg";
 import vector3 from "./vector-3.svg";
+
+import { Timer } from "lucide-react"
 
 type Recipe = {
     title: string;
@@ -17,7 +21,6 @@ type Recipe = {
     time: string;
     difficulty: string;
     ingredients: string;
-    timeIcon: string;
 };
 
 const recipes: Recipe[] = [
@@ -28,7 +31,6 @@ const recipes: Recipe[] = [
         time: "30 min",
         difficulty: "Fácil",
         ingredients: "5 ingredientes",
-        timeIcon: "/vector-2.svg",
     },
     {
         title: "Salada Caesar com Frango",
@@ -37,7 +39,6 @@ const recipes: Recipe[] = [
         time: "20 min",
         difficulty: "Fácil",
         ingredients: "6 ingredientes",
-        timeIcon: "/vector-4.svg",
     },
     {
         title: "Frango Grelhado com Legumes",
@@ -46,7 +47,6 @@ const recipes: Recipe[] = [
         time: "45 min",
         difficulty: "Médio",
         ingredients: "8 ingredientes",
-        timeIcon: "/vector-5.svg",
     },
 ];
 
@@ -77,10 +77,9 @@ const RecipeCard = ({ recipe, onViewRecipe }: RecipeCardProps): JSX.Element => {
                                 className="flex flex-col w-3 h-3 items-center justify-center relative"
                                 aria-hidden="true"
                             >
-                                <div
-                                    className="relative w-3 h-3 bg-position-[100%_100%]"
-                                    style={{ backgroundImage: `url(${recipe.timeIcon})` }}
-                                />
+                                <div className="relative w-3 h-3 bg-position-[100%_100%]">
+                                    <Timer />
+                                </div>
                             </div>
                             <span className="font-['Instrument_Sans-Medium',Helvetica] font-medium text-[#556858] relative w-fit -mt-px text-xs tracking-normal leading-[normal]">
                                 {recipe.time}
@@ -183,7 +182,7 @@ const RecipeDialog = ({ recipe, onClose }: RecipeDialogProps): JSX.Element => {
     );
 };
 
-const TelaReceitas = (): JSX.Element => {
+const Page = (): JSX.Element => {
     const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
     const [generationMessage, setGenerationMessage] = useState("");
 
@@ -237,7 +236,7 @@ const TelaReceitas = (): JSX.Element => {
                         className="absolute -top-30 right-0 w-60 h-55 object-cover"
                         alt=""
                         aria-hidden="true"
-                        src={leafAccentIllustration}
+                        src={folha}
                     />
                     <div
                         className="absolute left-[calc(50.00%-490px)] -bottom-10 w-245 h-20 bg-[#e8efe9] rounded-[490px/40px] blur-[20px] opacity-50"
@@ -322,4 +321,4 @@ const TelaReceitas = (): JSX.Element => {
     );
 };
 
-export default TelaReceitas
+export default Page

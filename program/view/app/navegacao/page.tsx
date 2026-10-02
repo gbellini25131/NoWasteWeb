@@ -18,9 +18,9 @@ type ActionCard = {
 
 const actionCards: ActionCard[] = [
     {
-        title: "Meu Estoque",
+        title: "Meu estoque",
         description: "Gerencie seus produtos e acompanhe as validades",
-        buttonLabel: "Acessar Estoque",
+        buttonLabel: "Acessar estoque",
         icon: Refrigerator,
     },
     {
