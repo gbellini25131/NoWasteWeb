@@ -1,30 +1,25 @@
 'use client';
 
-import { FormEvent, useState } from "react";
+import {SyntheticEvent, useState} from "react";
+import {fraunces, instrumentSans} from "@/util/Fonts";
 import Image from "next/image";
 import Link from "next/link";
-import { Fraunces } from "next/font/google";
 import { Leaf, Lock, Mail } from "lucide-react";
 
 import folha from "../../public/folha.png";
-
-const fraunces = Fraunces({
-    subsets: ["latin"],
-    display: "swap",
-});
 
 const TelaLogin = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [submitted, setSubmitted] = useState(false);
 
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (event: SyntheticEvent) => {
         event.preventDefault();
         setSubmitted(true);
     };
 
     return (
-        <main className={`flex flex-col min-h-256 items-center relative bg-[#f7f9f6] ${fraunces.className}`}>
+        <main className={`flex flex-col min-h-256 items-center relative bg-[#f7f9f6]`}>
             <header className="flex justify-between px-20 py-6 self-stretch w-full bg-transparent items-center relative flex-[0_0_auto]">
                 <Link
                     className="inline-flex items-center gap-2 relative flex-[0_0_auto]"
@@ -34,16 +29,16 @@ const TelaLogin = () => {
                     <span className="flex w-8 h-8 items-center justify-center shrink-0 bg-[#2d5a27] rounded-2xl">
                         <Leaf className="w-4 h-4 text-white shrink-0" />
                     </span>
-                    <span className="relative w-fit font-bold text-[#1e291f] text-xl tracking-normal leading-[normal]">
+                    <span className={`${fraunces.className} relative w-fit font-bold text-[#1e291f] text-xl tracking-normal leading-[normal] `}>
                         NoWaste
                     </span>
                 </Link>
                 <nav aria-label="Navegação principal">
                     <Link
-                        className="inline-flex gap-6 items-center relative flex-[0_0_auto] font-medium text-[#556858] text-sm tracking-normal leading-[normal] hover:text-[#2d5a27] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2d5a27] focus-visible:ring-offset-2"
-                        href="/"
+                        className={`${instrumentSans.className} inline-flex gap-6 items-center relative flex-[0_0_auto] font-medium text-[#556858] text-sm tracking-normal leading-[normal] hover:text-[#2d5a27] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2d5a27] focus-visible:ring-offset-2`}
+                        href="/inicio"
                     >
-                        Voltar a Home
+                        Voltar ao Início
                     </Link>
                 </nav>
             </header>
@@ -69,18 +64,18 @@ const TelaLogin = () => {
                         <div className="flex flex-col items-center gap-3 relative self-stretch w-full flex-[0_0_auto]">
                             <h1
                                 id="login-title"
-                                className="relative self-stretch -mt-px font-bold text-[#1e291f] text-[32px] text-center tracking-normal leading-[normal]"
+                                className={`${fraunces.className} relative self-stretch -mt-px font-bold text-[#1e291f] text-[32px] text-center tracking-normal leading-[normal]`}
                             >
                                 Entre na sua conta
                             </h1>
-                            <p className="relative self-stretch font-normal text-[#556858] text-[15px] text-center tracking-normal leading-[22.5px]">
+                            <p className={`${instrumentSans.className} relative self-stretch font-normal text-[#556858] text-[15px] text-center tracking-normal leading-[22.5px]`}>
                                 Entre na sua conta NoWaste informando email e senha
                             </p>
                         </div>
                         <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
                             <div className="flex flex-col items-start gap-2 relative self-stretch w-full flex-[0_0_auto]">
                                 <label
-                                    className="relative self-stretch -mt-px font-semibold text-[#1e291f] text-sm tracking-normal leading-[normal]"
+                                    className={`${instrumentSans.className} relative self-stretch -mt-px font-semibold text-[#1e291f] text-sm tracking-normal leading-[normal]`}
                                     htmlFor="input-1"
                                 >
                                     Email
@@ -90,7 +85,7 @@ const TelaLogin = () => {
                                         <Mail className="w-4.5 h-4.5 text-[#556858] shrink-0" />
                                     </span>
                                     <input
-                                        className="relative flex-1 -mt-px font-normal text-[#556858] text-[15px] tracking-normal leading-[normal] [background:transparent] border-[none] p-0 focus:outline-none"
+                                        className={`${instrumentSans.className} relative flex-1 -mt-px font-normal text-[#556858] text-[15px] tracking-normal leading-[normal] [background:transparent] border-[none] p-0 focus:outline-none`}
                                         id="input-1"
                                         name="email"
                                         placeholder="nowaste@example.com"
@@ -105,7 +100,7 @@ const TelaLogin = () => {
                             <div className="flex flex-col items-start gap-2 relative self-stretch w-full flex-[0_0_auto]">
                                 <div className="flex flex-col items-start gap-2 relative self-stretch w-full flex-[0_0_auto]">
                                     <label
-                                        className="relative self-stretch -mt-px font-semibold text-[#1e291f] text-sm tracking-normal leading-[normal]"
+                                        className={`${instrumentSans.className} relative self-stretch -mt-px font-semibold text-[#1e291f] text-sm tracking-normal leading-[normal]`}
                                         htmlFor="password"
                                     >
                                         Senha
@@ -115,7 +110,7 @@ const TelaLogin = () => {
                                             <Lock className="w-4.5 h-4.5 text-[#556858] shrink-0" />
                                         </span>
                                         <input
-                                            className="relative flex-1 -mt-px font-normal text-[#556858] text-[15px] tracking-normal leading-[normal] [background:transparent] border-[none] p-0 focus:outline-none"
+                                            className={`${instrumentSans.className} relative flex-1 -mt-px font-normal text-[#556858] text-[15px] tracking-normal leading-[normal] [background:transparent] border-[none] p-0 focus:outline-none`}
                                             id="password"
                                             name="password"
                                             placeholder="Digite sua senha"
@@ -129,8 +124,8 @@ const TelaLogin = () => {
                                 </div>
                                 <div className="flex items-start justify-end relative self-stretch w-full flex-[0_0_auto]">
                                     <Link
-                                        className="relative w-fit -mt-px font-medium text-[#2d5a27] text-[13px] tracking-normal leading-[normal] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2d5a27]"
-                                        href="/forgot-password"
+                                        className={`${instrumentSans.className} relative w-fit -mt-px font-medium text-[#2d5a27] text-[13px] tracking-normal leading-[normal] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2d5a27]`}
+                                        href=""
                                     >
                                         Esqueceu sua senha?
                                     </Link>
@@ -142,23 +137,23 @@ const TelaLogin = () => {
                                 className="items-center justify-center px-0 py-3.5 self-stretch w-full bg-[#2d5a27] rounded-[10px] flex relative flex-[0_0_auto] hover:bg-[#24491f] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2d5a27] focus-visible:ring-offset-2 cursor-pointer"
                                 type="submit"
                             >
-                                <span className="relative w-fit -mt-px font-semibold text-white text-base tracking-normal leading-[normal]">
+                                <span className={`${instrumentSans.className} relative w-fit -mt-px font-semibold text-white text-base tracking-normal leading-[normal]`}>
                                     Entrar
                                 </span>
                             </button>
                             <div className="inline-flex items-center justify-center gap-1.5 px-3 py-2 relative flex-[0_0_auto] bg-[#e8efe9] rounded-md">
                                 <Leaf className="w-3.5 h-3.5 text-[#2d5a27] shrink-0" />
-                                <span className="relative w-fit -mt-px font-semibold text-[#2d5a27] text-xs tracking-normal leading-[normal]">
+                                <span className={`${instrumentSans.className} relative w-fit -mt-px font-semibold text-[#2d5a27] text-xs tracking-normal leading-[normal]`}>
                                     Desperdício zero com NoWaste
                                 </span>
                             </div>
-                            <div className="inline-flex items-center gap-1 relative flex-[0_0_auto]">
+                            <div className={`${instrumentSans.className} inline-flex items-center gap-1 relative flex-[0_0_auto]`}>
                                 <span className="relative w-fit -mt-px font-normal text-[#556858] text-sm tracking-normal leading-[normal]">
                                     Novo por aqui?
                                 </span>
                                 <Link
                                     className="relative w-fit -mt-px font-semibold text-[#2d5a27] text-sm tracking-normal underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2d5a27]"
-                                    href="/app/Cadastro"
+                                    href="/cadastro"
                                 >
                                     Crie sua conta
                                 </Link>

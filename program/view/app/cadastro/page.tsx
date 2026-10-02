@@ -4,14 +4,9 @@ import { FormEvent, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { User, Mail, Lock, Leaf, CheckCircle2, LucideIcon } from "lucide-react";
-import { Fraunces } from "next/font/google";
+import {fraunces, instrumentSans} from "@/util/Fonts";
 
 import folha from "../../public/folha.png";
-
-const fraunces = Fraunces({
-    subsets: ["latin"],
-    display: "swap",
-});
 
 type FieldDefinition = {
     id: string;
@@ -93,7 +88,7 @@ const TelaCadastro = () => {
     };
 
     return (
-        <main className={`flex flex-col min-h-256 items-center relative bg-[#f7f9f6] ${fraunces.className}`}>
+        <main className="flex flex-col min-h-256 items-center relative bg-[#f7f9f6] ${fraunces.className}">
             <header className="flex justify-between px-20 py-6 self-stretch w-full bg-transparent items-center relative flex-[0_0_auto]">
                 <Link
                     href="/"
@@ -103,15 +98,15 @@ const TelaCadastro = () => {
                     <span className="flex items-center justify-center w-8 h-8 relative bg-[#2d5a27] rounded-2xl shrink-0">
                         <Leaf className="w-4.5 h-4.5 text-white" />
                     </span>
-                    <span className="relative w-fit font-bold text-[#1e291f] text-xl tracking-normal leading-[normal]">
+                    <span className={`${fraunces.className} relative w-fit font-bold text-[#1e291f] text-xl tracking-normal leading-[normal]`}>
                         NoWaste
                     </span>
                 </Link>
                 <Link
-                    href="/"
-                    className="inline-flex gap-6 items-center relative flex-[0_0_auto] -mt-px font-medium text-[#556858] text-sm tracking-normal leading-[normal]"
+                    href="/inicio"
+                    className={`${instrumentSans.className} inline-flex gap-6 items-center relative flex-[0_0_auto] -mt-px font-medium text-[#556858] text-sm tracking-normal leading-[normal]`}
                 >
-                    Voltar a Home
+                    Voltar ao Início
                 </Link>
             </header>
             <section
@@ -131,12 +126,12 @@ const TelaCadastro = () => {
                     <form
                         onSubmit={handleSubmit}
                         noValidate={false}
-                        className="flex-col w-110 items-start gap-7 p-10 bg-white rounded-3xl shadow-[0px_16px_32px_#2d5a2710] flex relative flex-[0_0_auto]"
+                        className={`${instrumentSans.className} flex-col w-110 items-start gap-7 p-10 bg-white rounded-3xl shadow-[0px_16px_32px_#2d5a2710] flex relative flex-[0_0_auto]`}
                     >
                         <div className="flex flex-col items-center gap-3 relative self-stretch w-full flex-[0_0_auto]">
                             <h1
                                 id="registration-title"
-                                className="relative self-stretch -mt-px font-bold text-[#1e291f] text-[32px] text-center tracking-normal leading-[normal]"
+                                className={`${fraunces.className} relative self-stretch -mt-px font-bold text-[#1e291f] text-[32px] text-center tracking-normal leading-[normal]`}
                             >
                                 Crie sua conta
                             </h1>
@@ -199,7 +194,7 @@ const TelaCadastro = () => {
                                     {submitted ? (
                                         <CheckCircle2 className="w-3.5 h-3.5" />
                                     ) : (
-                                        <Leaf className="w-3.5 h-3.5" />
+                                        <Leaf className="w-3.5 h-3.5"/>
                                     )}
                                 </span>
                                 <span className="relative w-fit -mt-px font-semibold text-[#2d5a27] text-xs tracking-normal leading-[normal]">
@@ -213,7 +208,7 @@ const TelaCadastro = () => {
                                     Já tem uma conta?
                                 </span>
                                 <Link
-                                    href="/app/Login"
+                                    href="/login"
                                     className="relative w-fit -mt-px font-semibold text-[#2d5a27] text-sm tracking-normal leading-[normal] underline"
                                 >
                                     Entrar

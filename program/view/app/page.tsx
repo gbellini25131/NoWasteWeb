@@ -1,6 +1,5 @@
-import TelaInicio from "@/app/Inicio/TelaInicio";
-import TelaCadastro from "@/app/Cadastro/TelaCadastro";
+import TelaInicio from "@/app/inicio/page";
 
 export default function Home() {
-  return <TelaCadastro />
+  return <TelaInicio />
 }

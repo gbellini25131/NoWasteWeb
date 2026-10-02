@@ -1,15 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Fraunces } from "next/font/google";
 import { Leaf, UserKey, UserPlus } from "lucide-react";
+import { fraunces, instrumentSans } from "@/util/Fonts"
 
 import folha from "../../public/folha.png";
-
-// Carregamento otimizado das fontes via Next.js Font Optimization
-const fraunces = Fraunces({
-    subsets: ["latin"],
-    display: "swap",
-});
 
 type AccessOption = {
     title: string;
@@ -24,8 +18,8 @@ const accessOptions: AccessOption[] = [
         title: "Entrar na sua conta",
         description:
             "Entre em uma conta existente e navegue pelo seu estoque e receitas",
-        action: "Fazer Login",
-        href: "/Login", // Atualizado de "/TelaLogin" para "/Login"
+        action: "Fazer login",
+        href: "/login",
         actionClassName:
             "bg-[#2d5a27] text-white border border-solid border-[#2d5a27]",
     },
@@ -34,7 +28,7 @@ const accessOptions: AccessOption[] = [
         description:
             "Cria sua conta NoWaste para controlar seu estoque e sugerir receitas",
         action: "Cadastrar-se",
-        href: "/Cadastro", // Atualizado de "/TelaCadastro" para "/Cadastro"
+        href: "/cadastro",
         actionClassName:
             "bg-transparent text-[#2d5a27] border border-solid border-[#2d5a27]",
     },
@@ -58,14 +52,6 @@ const TelaInicio = () => {
                         NoWaste
                     </span>
                 </Link>
-                <nav aria-label="Navegação principal">
-                    <Link
-                        href="/"
-                        className={`${fraunces.className} relative w-fit -mt-px font-medium text-[#556858] text-sm tracking-normal leading-[normal] focus-visible:outline focus-visible:outline-offset-4 focus-visible:outline-[#2d5a27]`}
-                    >
-                        Voltar a Home
-                    </Link>
-                </nav>
             </header>
             <main className="flex flex-col h-219.75 items-center justify-center pt-10 pb-20 px-0 relative self-stretch w-full">
                 <div className="flex flex-col w-160 max-w-full items-center justify-center relative flex-[0_0_auto]">
@@ -90,7 +76,7 @@ const TelaInicio = () => {
                                 Bem-vindo ao NoWaste
                             </h1>
                             <p
-                                className={`${fraunces.className} relative self-stretch font-normal text-[#556858] text-[15px] text-center tracking-normal leading-[22.5px]`}
+                                className={`${instrumentSans.className} relative self-stretch font-normal text-[#556858] text-[15px] text-center tracking-normal leading-[22.5px]`}
                             >
                                 Escolha como deseja continuar
                             </p>
@@ -115,14 +101,14 @@ const TelaInicio = () => {
                                             {option.title}
                                         </h2>
                                         <p
-                                            className={`${fraunces.className} relative self-stretch font-normal text-[#556858] text-[13px] text-center tracking-normal leading-[normal]`}
+                                            className={`${instrumentSans.className} relative self-stretch font-normal text-[#556858] text-[13px] text-center tracking-normal leading-[normal]`}
                                         >
                                             {option.description}
                                         </p>
                                     </div>
                                     <Link
                                         href={option.href}
-                                        className={`${fraunces.className} flex items-center justify-center px-6 py-3 relative self-stretch w-full flex-[0_0_auto] rounded-[10px] font-semibold text-[15px] tracking-normal leading-[normal] whitespace-nowrap transition-colors hover:opacity-90 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-[#2d5a27] ${option.actionClassName}`}
+                                        className={`${instrumentSans.className} flex items-center justify-center px-6 py-3 relative self-stretch w-full flex-[0_0_auto] rounded-[10px] font-semibold text-[15px] tracking-normal leading-[normal] whitespace-nowrap transition-colors hover:opacity-90 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-[#2d5a27] ${option.actionClassName}`}
                                     >
                                         {option.action}
                                     </Link>
@@ -133,7 +119,7 @@ const TelaInicio = () => {
                             <div className="inline-flex items-center gap-1.5 px-3 py-2 relative flex-[0_0_auto] bg-[#e8efe9] rounded-md">
                                 <Leaf className="w-3.5 h-3.5 text-[#2d5a27]" />
                                 <span
-                                    className={`${fraunces.className} relative w-fit -mt-px font-semibold text-[#2d5a27] text-xs tracking-normal leading-[normal]`}
+                                    className={`${instrumentSans.className} relative w-fit -mt-px font-semibold text-[#2d5a27] text-xs tracking-normal leading-[normal]`}
                                 >
                                     Desperdício zero com NoWaste
                                 </span>
