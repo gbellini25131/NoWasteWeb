@@ -177,14 +177,14 @@ const TelaCadastro = () => {
                             })}
                         </div>
                         <div className="flex flex-col items-center gap-6 relative self-stretch w-full flex-[0_0_auto]">
-                            <button
-                                type="submit"
+                            <Link
+                                href="/navegacao"
                                 className="items-center justify-center px-0 py-3.5 self-stretch w-full bg-[#2d5a27] rounded-[10px] flex relative flex-[0_0_auto] cursor-pointer"
                             >
                                 <span className="relative w-fit -mt-px font-semibold text-white text-base tracking-normal leading-[normal]">
                                     Criar Conta
                                 </span>
-                            </button>
+                            </Link>
                             <div
                                 role="status"
                                 aria-live="polite"

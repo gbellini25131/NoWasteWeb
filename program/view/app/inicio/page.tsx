@@ -10,7 +10,6 @@ type AccessOption = {
     description: string;
     action: string;
     href: string;
-    actionClassName: string;
 };
 
 const accessOptions: AccessOption[] = [
@@ -19,18 +18,14 @@ const accessOptions: AccessOption[] = [
         description:
             "Entre em uma conta existente e navegue pelo seu estoque e receitas",
         action: "Fazer login",
-        href: "/login",
-        actionClassName:
-            "bg-[#2d5a27] text-white border border-solid border-[#2d5a27]",
+        href: "/login"
     },
     {
         title: "Criar uma conta",
         description:
             "Cria sua conta NoWaste para controlar seu estoque e sugerir receitas",
         action: "Cadastrar-se",
-        href: "/cadastro",
-        actionClassName:
-            "bg-transparent text-[#2d5a27] border border-solid border-[#2d5a27]",
+        href: "/cadastro"
     },
 ];
 
@@ -108,7 +103,7 @@ const TelaInicio = () => {
                                     </div>
                                     <Link
                                         href={option.href}
-                                        className={`${instrumentSans.className} flex items-center justify-center px-6 py-3 relative self-stretch w-full flex-[0_0_auto] rounded-[10px] font-semibold text-[15px] tracking-normal leading-[normal] whitespace-nowrap transition-colors hover:opacity-90 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-[#2d5a27] ${option.actionClassName}`}
+                                        className={`${instrumentSans.className} flex items-center justify-center px-6 py-3 relative self-stretch w-full flex-[0_0_auto] rounded-[10px] font-semibold text-[15px] tracking-normal leading-[normal] whitespace-nowrap transition-colors hover:opacity-90 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-[#2d5a27] button`}
                                     >
                                         {option.action}
                                     </Link>
