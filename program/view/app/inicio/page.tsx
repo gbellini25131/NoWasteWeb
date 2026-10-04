@@ -1,9 +1,12 @@
-import Image from "next/image";
+'use client'
+
 import Link from "next/link";
 import { Leaf, UserKey, UserPlus } from "lucide-react";
 import { fraunces, instrumentSans } from "@/util/Fonts"
 
-import folha from "../../public/folha.png";
+import Folha from "@/components/Folha";
+import Cabecalho from "@/components/Cabecalho";
+import Slogan from "@/components/Slogan";
 
 type AccessOption = {
     title: string;
@@ -32,29 +35,10 @@ const accessOptions: AccessOption[] = [
 const TelaInicio = () => {
     return (
         <div className="flex flex-col min-h-256 items-center relative bg-[#f7f9f6]">
-            <header className="flex justify-between px-20 py-6 self-stretch w-full bg-transparent items-center relative flex-[0_0_auto]">
-                <Link
-                    href="/"
-                    aria-label="NoWaste - página inicial"
-                    className="inline-flex items-center gap-2 relative flex-[0_0_auto] focus-visible:outline focus-visible:outline-offset-4 focus-visible:outline-[#2d5a27]"
-                >
-                    <span className="flex w-8 h-8 items-center justify-center bg-[#2d5a27] rounded-2xl">
-                        <Leaf className="w-4 h-4 text-white" />
-                    </span>
-                    <span
-                        className={`${fraunces.className} relative w-fit font-bold text-[#1e291f] text-xl tracking-normal leading-[normal]`}
-                    >
-                        NoWaste
-                    </span>
-                </Link>
-            </header>
+            <Cabecalho onClickUrl="" onClickScreen="" ehInicio={true}/>
             <main className="flex flex-col h-219.75 items-center justify-center pt-10 pb-20 px-0 relative self-stretch w-full">
                 <div className="flex flex-col w-160 max-w-full items-center justify-center relative flex-[0_0_auto]">
-                    <Image
-                        className="absolute -top-35 right-0 w-60 h-60 object-cover"
-                        alt="Ilustração de folhas"
-                        src={folha}
-                    />
+                    <Folha />
                     <div
                         aria-hidden="true"
                         className="absolute left-[calc(50.00%-260px)] -bottom-10 w-130 h-20 bg-[#e8efe9] rounded-[260px/40px] blur-[20px] opacity-50"
@@ -111,14 +95,7 @@ const TelaInicio = () => {
                             ))}
                         </div>
                         <div className="flex flex-col items-center gap-6 relative self-stretch w-full flex-[0_0_auto]">
-                            <div className="inline-flex items-center gap-1.5 px-3 py-2 relative flex-[0_0_auto] bg-[#e8efe9] rounded-md">
-                                <Leaf className="w-3.5 h-3.5 text-[#2d5a27]" />
-                                <span
-                                    className={`${instrumentSans.className} relative w-fit -mt-px font-semibold text-[#2d5a27] text-xs tracking-normal leading-[normal]`}
-                                >
-                                    Desperdício zero com NoWaste
-                                </span>
-                            </div>
+                            <Slogan />
                         </div>
                     </section>
                 </div>

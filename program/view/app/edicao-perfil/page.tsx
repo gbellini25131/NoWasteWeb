@@ -1,12 +1,12 @@
 'use client'
 
-import { JSX, SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { Leaf, LucideIcon, User, Mail, Smartphone, Lock } from "lucide-react";
 import { fraunces, instrumentSans } from "@/util/Fonts";
-
-import folha from "../../public/folha.png";
+import Folha from "@/components/Folha";
+import Cabecalho from "@/components/Cabecalho";
+import Slogan from "@/components/Slogan";
 
 type FormValues = {
     name: string;
@@ -92,7 +92,7 @@ const formRows: FormField[][] = [
     ],
 ];
 
-const TelaEdicaoPerfil = (): JSX.Element => {
+const TelaEdicaoPerfil = () => {
     const [formValues, setFormValues] = useState<FormValues>(initialFormValues);
     const [submitted, setSubmitted] = useState(false);
 
@@ -124,38 +124,10 @@ const TelaEdicaoPerfil = (): JSX.Element => {
 
     return (
         <div className="flex flex-col min-h-screen items-center relative bg-[#f7f9f6]">
-            <header className="flex justify-between px-6 sm:px-20 py-6 w-full items-center">
-                <div className="inline-flex items-center gap-2">
-                    <span className="flex w-8 h-8 items-center justify-center bg-[#2d5a27] rounded-2xl">
-                        <Leaf className="w-4 h-4 text-white" />
-                    </span>
-                    <span
-                        className={`${fraunces.className} font-bold text-[#1e291f] text-xl`}
-                    >
-                        NoWaste
-                    </span>
-                </div>
-                <nav
-                    className="inline-flex gap-6 items-center"
-                    aria-label="Navegação principal"
-                >
-                    <Link
-                        className={`${instrumentSans.className} font-medium text-[#556858] text-sm transition-colors hover:text-[#2d5a27] focus-visible:outline focus-visible:outline-offset-4 focus-visible:outline-[#2d5a27]`}
-                        href="/navegacao"
-                    >
-                        Voltar à Tela Principal
-                    </Link>
-                </nav>
-            </header>
-
+            <Cabecalho onClickUrl="/navegacao" onClickScreen="à Tela Principal" ehInicio={false} />
             <main className="flex flex-col items-center justify-center py-10 px-4 w-full flex-1">
                 <div className="flex flex-col w-full max-w-150 items-center justify-center relative">
-                    <Image
-                        className="absolute -top-27.5 right-0 w-60 h-60 object-cover pointer-events-none"
-                        alt=""
-                        aria-hidden="true"
-                        src={folha}
-                    />
+                    <Folha />
                     <div
                         className="absolute left-[calc(50%-230px)] -bottom-10 w-115 h-20 bg-[#e8efe9] rounded-[230px/40px] blur-[20px] opacity-50 pointer-events-none"
                         aria-hidden="true"
@@ -238,18 +210,7 @@ const TelaEdicaoPerfil = (): JSX.Element => {
                                     Cancelar
                                 </span>
                             </button>
-                            <div
-                                className="inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-[#e8efe9] rounded-md"
-                                role="status"
-                                aria-live="polite"
-                            >
-                                <Leaf className="w-3.5 h-3.5 text-[#2d5a27]" />
-                                <span className={`${instrumentSans.className} font-semibold text-[#2d5a27] text-xs`}>
-                                    {submitted
-                                        ? "Alterações salvas com sucesso"
-                                        : "Desperdício zero com NoWaste"}
-                                </span>
-                            </div>
+                            <Slogan />
                         </div>
                     </form>
                 </div>

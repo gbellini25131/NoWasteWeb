@@ -1,20 +1,18 @@
 'use client';
 
-import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
-
-import folha from "../../public/folha.png";
-
 import { Leaf, LucideIcon, Refrigerator, CircleUserRound, ScrollText } from "lucide-react";
-import {fraunces, instrumentSans} from "@/util/Fonts";
+import { fraunces, instrumentSans } from "@/util/Fonts";
+import Folha from "@/components/Folha";
+import Cabecalho from "@/components/Cabecalho";
+import Slogan from "@/components/Slogan";
 
 type ActionCard = {
     title: string;
     description: string;
     buttonLabel: string;
     icon: LucideIcon;
-    href : string;
+    href: string;
 };
 
 const actionCards: ActionCard[] = [
@@ -23,63 +21,31 @@ const actionCards: ActionCard[] = [
         description: "Gerencie seus produtos e acompanhe as validades",
         buttonLabel: "Acessar estoque",
         icon: Refrigerator,
-        href : "/"
+        href: "/estoque"
     },
     {
         title: "Editar Perfil",
         description: "Atualize suas informações pessoais e preferências",
         buttonLabel: "Editar Perfil",
         icon: CircleUserRound,
-        href : "/"
+        href: "/edicao-perfil"
     },
     {
         title: "Sugestão de Receitas",
         description: "Receba receitas baseadas nos itens do seu estoque",
         buttonLabel: "Ver Receitas",
         icon: ScrollText,
-        href : "/"
+        href: "/sugestao-receitas"
     },
 ];
 
 const TelaNavegacao = () => {
-    const [selectedAction, setSelectedAction] = useState<string>("");
-
-    const handleAction = (action: string) => {
-        setSelectedAction(action);
-    };
-
     return (
         <main className="flex min-h-256 flex-col items-center relative bg-[#f7f9f6]">
-            <header className="flex justify-between px-20 py-6 self-stretch w-full bg-transparent items-center relative flex-[0_0_auto]">
-                <Link
-                    className="inline-flex items-center gap-2 relative flex-[0_0_auto]"
-                    href="/"
-                    aria-label="NoWaste página inicial"
-                >
-                    <span className="flex w-8 h-8 items-center justify-center shrink-0 bg-[#2d5a27] rounded-2xl">
-                        <Leaf className="w-4 h-4 text-white shrink-0" />
-                    </span>
-                    <span className={`${fraunces.className} relative w-fit font-bold text-[#1e291f] text-xl tracking-normal leading-[normal] `}>
-                        NoWaste
-                    </span>
-                </Link>
-                <nav aria-label="Navegação principal">
-                    <Link
-                        className={`${instrumentSans.className} inline-flex gap-6 items-center relative flex-[0_0_auto] font-medium text-[#556858] text-sm tracking-normal leading-[normal] hover:text-[#2d5a27] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2d5a27] focus-visible:ring-offset-2`}
-                        href="/inicio"
-                    >
-                        Voltar ao Início
-                    </Link>
-                </nav>
-            </header>
+            <Cabecalho onClickUrl="/inicio" onClickScreen="ao Início" ehInicio={false}/>
             <section className="flex flex-col h-219.75 items-center justify-center pt-10 pb-20 px-0 relative self-stretch w-full">
                 <div className="flex flex-col w-180 items-center justify-center relative flex-[0_0_auto]">
-                    <Image
-                        className="absolute -top-30 right-0 w-60 h-60 object-cover"
-                        alt=""
-                        aria-hidden="true"
-                        src={folha}
-                    />
+                    <Folha />
                     <div
                         className="absolute left-[calc(50.00%-300px)] -bottom-10 w-150 h-20 bg-[#e8efe9] rounded-[300px/40px] blur-[20px] opacity-50"
                         aria-hidden="true"
@@ -116,28 +82,22 @@ const TelaNavegacao = () => {
                                             </p>
                                         </div>
 
-                                        <button
-                                            type="button"
-                                            onClick={() => handleAction(card.title)}
+                                        <Link
+                                            href={card.href}
                                             aria-label={card.buttonLabel}
-                                            className={"button flex h-11 items-center justify-center px-4 relative self-stretch w-full flex-[0_0_auto] rounded-[10px] cursor-pointer focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-[#2d5a27] bg-[#2d5a27] hover:bg-[#23481f] text-white"}
+                                            className="flex h-11 w-full items-center justify-center text-center px-4 rounded-xl border border-[#2d5a27] text-[#2d5a27] bg-transparent hover:bg-[#2d5a27] hover:text-white transition-colors duration-200 cursor-pointer focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-[#2d5a27]"
                                         >
-                                            <span className="relative w-fit -mt-px font-semibold text-sm tracking-normal leading-[normal]">
+                                            <span className="font-semibold text-sm text-center leading-none">
                                                 {card.buttonLabel}
                                             </span>
-                                        </button>
+                                        </Link>
                                     </article>
                                 );
                             })}
                         </div>
 
                         <div className="flex flex-col items-center gap-6 relative self-stretch w-full flex-[0_0_auto]">
-                            <div className="inline-flex items-center justify-center gap-1.5 px-3 py-2 relative flex-[0_0_auto] bg-[#e8efe9] rounded-md">
-                                <Leaf className="w-3.5 h-3.5 text-[#2d5a27] shrink-0" />
-                                <span className={`${instrumentSans.className} relative w-fit -mt-px font-semibold text-[#2d5a27] text-xs tracking-normal leading-[normal]`}>
-                                    Desperdício zero com NoWaste
-                                </span>
-                            </div>
+                            <Slogan />
                         </div>
                     </div>
                 </div>

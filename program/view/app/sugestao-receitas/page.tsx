@@ -1,11 +1,12 @@
 'use client';
 
-import { JSX, useState } from "react";
-import Image from "next/image";
+import { useState } from "react";
 import Link from "next/link";
-import folha from "../../public/folha.png";
 import { Leaf, Utensils, Salad, CakeSlice, Check, CookingPot, LucideIcon } from "lucide-react";
 import {fraunces, instrumentSans} from "@/util/Fonts";
+import Folha from "@/components/Folha";
+import Cabecalho from "@/components/Cabecalho";
+import Slogan from "@/components/Slogan";
 
 type RecipeOption = {
     count: number;
@@ -31,7 +32,7 @@ const recipeOptions: RecipeOption[] = [
     },
 ];
 
-const TelaSugestaoReceitas = (): JSX.Element => {
+const TelaSugestaoReceitas = () => {
     const [selectedCount, setSelectedCount] = useState<number>(3);
     const [isGenerating, setIsGenerating] = useState<boolean>(false);
 
@@ -44,36 +45,10 @@ const TelaSugestaoReceitas = (): JSX.Element => {
 
     return (
         <main className="flex flex-col min-h-screen items-center relative bg-[#f7f9f6]">
-            <header className="flex justify-between px-20 py-6 self-stretch w-full bg-transparent items-center relative flex-[0_0_auto]">
-                <Link
-                    href="/"
-                    aria-label="NoWaste - Página inicial"
-                    className="inline-flex items-center gap-2 relative flex-[0_0_auto]"
-                >
-                    <span className="flex items-center justify-center w-8 h-8 bg-[#2d5a27] rounded-2xl">
-                        <Leaf className="w-4 h-4 text-white" />
-                    </span>
-                    <span className={`${fraunces.className} relative w-fit font-bold text-[#1e291f] text-xl tracking-normal leading-[normal]`}>
-                        NoWaste
-                    </span>
-                </Link>
-                <nav aria-label="Navegação principal">
-                    <Link
-                        href="/"
-                        className={`${instrumentSans.className} inline-flex gap-6 items-center relative flex-[0_0_auto] -mt-px font-medium text-[#556858] text-sm tracking-normal leading-[normal] hover:text-[#2d5a27]`}
-                    >
-                        Voltar a Home
-                    </Link>
-                </nav>
-            </header>
-
+            <Cabecalho onClickUrl="/navegacao" onClickScreen="à Tela Principal" ehInicio={false}/>
             <section className="flex flex-col flex-1 items-center justify-center pt-5 pb-15 px-0 relative self-stretch w-full">
                 <div className="flex flex-col w-160 items-center justify-center relative flex-[0_0_auto]">
-                    <Image
-                        className="absolute -top-27.5 right-0 w-60 h-60 object-cover"
-                        alt="Ilustração decorativa de folhas"
-                        src={folha}
-                    />
+                    <Folha/>
                     <div
                         aria-hidden="true"
                         className="absolute left-[calc(50.00%-250px)] -bottom-10 w-125 h-20 bg-[#e8efe9] rounded-[250px/40px] blur-[20px] opacity-50"
@@ -167,22 +142,17 @@ const TelaSugestaoReceitas = (): JSX.Element => {
                         </fieldset>
 
                         <div className="flex flex-col items-center gap-6 relative self-stretch w-full flex-[0_0_auto]">
-                            <button
+                            <Link
+                                href="/receitas"
                                 type="submit"
-                                disabled={isGenerating}
                                 className="flex items-center justify-center px-0 py-3.5 relative self-stretch w-full flex-[0_0_auto] bg-[#2d5a27] hover:bg-[#23471f] transition-colors rounded-[10px] disabled:cursor-wait disabled:opacity-80 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-[#2d5a27]"
                             >
                                 <span className={`${instrumentSans.className} relative w-fit -mt-px font-semibold text-white text-base tracking-normal leading-[normal]`}>
-                                    {isGenerating ? "Gerando..." : "Gerar receitas"}
+                                     Gerar receitas
                                 </span>
-                            </button>
+                            </Link>
 
-                            <div className="inline-flex items-center gap-1.5 px-3 py-2 relative flex-[0_0_auto] bg-[#e8efe9] rounded-md">
-                                <Leaf className="w-3.5 h-3.5 text-[#2d5a27]" />
-                                <span className={`${instrumentSans.className} relative w-fit -mt-px font-semibold text-[#2d5a27] text-[13px] tracking-normal leading-[normal]`}>
-                                    Desperdício zero com NoWaste
-                                </span>
-                            </div>
+                            <Slogan />
                         </div>
                     </form>
                 </div>

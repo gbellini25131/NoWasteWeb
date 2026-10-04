@@ -1,12 +1,12 @@
 'use client';
 
-import { FormEvent, useState } from "react";
-import Image from "next/image";
+import {FormEvent, useState} from "react";
 import Link from "next/link";
 import { User, Mail, Lock, Leaf, CheckCircle2, LucideIcon } from "lucide-react";
 import {fraunces, instrumentSans} from "@/util/Fonts";
-
-import folha from "../../public/folha.png";
+import Folha from "@/components/Folha";
+import Cabecalho from "@/components/Cabecalho";
+import Slogan from "@/components/Slogan";
 
 type FieldDefinition = {
     id: string;
@@ -89,36 +89,13 @@ const TelaCadastro = () => {
 
     return (
         <main className="flex flex-col min-h-256 items-center relative bg-[#f7f9f6] ${fraunces.className}">
-            <header className="flex justify-between px-20 py-6 self-stretch w-full bg-transparent items-center relative flex-[0_0_auto]">
-                <Link
-                    href="/"
-                    aria-label="NoWaste - página inicial"
-                    className="inline-flex items-center gap-2 relative flex-[0_0_auto]"
-                >
-                    <span className="flex items-center justify-center w-8 h-8 relative bg-[#2d5a27] rounded-2xl shrink-0">
-                        <Leaf className="w-4.5 h-4.5 text-white" />
-                    </span>
-                    <span className={`${fraunces.className} relative w-fit font-bold text-[#1e291f] text-xl tracking-normal leading-[normal]`}>
-                        NoWaste
-                    </span>
-                </Link>
-                <Link
-                    href="/inicio"
-                    className={`${instrumentSans.className} inline-flex gap-6 items-center relative flex-[0_0_auto] -mt-px font-medium text-[#556858] text-sm tracking-normal leading-[normal]`}
-                >
-                    Voltar ao Início
-                </Link>
-            </header>
+            <Cabecalho onClickUrl="/inicio" onClickScreen="ao Início" ehInicio={false} />
             <section
                 aria-labelledby="registration-title"
                 className="flex flex-col h-219.75 items-center justify-center pt-10 pb-20 px-0 relative self-stretch w-full"
             >
                 <div className="flex flex-col w-120 items-center justify-center relative flex-[0_0_auto]">
-                    <Image
-                        className="absolute -top-30 right-0 w-60 h-60 object-cover"
-                        alt="Folhas decorativas"
-                        src={folha}
-                    />
+                    <Folha />
                     <div
                         aria-hidden="true"
                         className="absolute left-[calc(50.00%-190px)] -bottom-10 w-95 h-20 bg-[#e8efe9] rounded-[190px/40px] blur-[20px] opacity-50"
@@ -185,24 +162,7 @@ const TelaCadastro = () => {
                                     Criar Conta
                                 </span>
                             </Link>
-                            <div
-                                role="status"
-                                aria-live="polite"
-                                className="inline-flex items-center gap-1.5 px-3 py-2 relative flex-[0_0_auto] bg-[#e8efe9] rounded-md"
-                            >
-                                <span className="flex items-center justify-center shrink-0 text-[#2d5a27]">
-                                    {submitted ? (
-                                        <CheckCircle2 className="w-3.5 h-3.5" />
-                                    ) : (
-                                        <Leaf className="w-3.5 h-3.5"/>
-                                    )}
-                                </span>
-                                <span className="relative w-fit -mt-px font-semibold text-[#2d5a27] text-xs tracking-normal leading-[normal]">
-                                    {submitted
-                                        ? "Conta criada com sucesso"
-                                        : "Desperdício zero com NoWaste"}
-                                </span>
-                            </div>
+                            <Slogan />
                             <div className="inline-flex items-center gap-1 relative flex-[0_0_auto]">
                                 <span className="relative w-fit -mt-px font-normal text-[#556858] text-sm tracking-normal leading-[normal]">
                                     Já tem uma conta?

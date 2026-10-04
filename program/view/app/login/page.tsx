@@ -2,11 +2,11 @@
 
 import {SyntheticEvent, useState} from "react";
 import {fraunces, instrumentSans} from "@/util/Fonts";
-import Image from "next/image";
 import Link from "next/link";
 import { Leaf, Lock, Mail } from "lucide-react";
-
-import folha from "../../public/folha.png";
+import Folha from "@/components/Folha";
+import Cabecalho from "@/components/Cabecalho";
+import Slogan from "@/components/Slogan";
 
 const TelaLogin = () => {
     const [email, setEmail] = useState("");
@@ -20,39 +20,13 @@ const TelaLogin = () => {
 
     return (
         <main className={`flex flex-col min-h-256 items-center relative bg-[#f7f9f6]`}>
-            <header className="flex justify-between px-20 py-6 self-stretch w-full bg-transparent items-center relative flex-[0_0_auto]">
-                <Link
-                    className="inline-flex items-center gap-2 relative flex-[0_0_auto]"
-                    href="/"
-                    aria-label="NoWaste página inicial"
-                >
-                    <span className="flex w-8 h-8 items-center justify-center shrink-0 bg-[#2d5a27] rounded-2xl">
-                        <Leaf className="w-4 h-4 text-white shrink-0" />
-                    </span>
-                    <span className={`${fraunces.className} relative w-fit font-bold text-[#1e291f] text-xl tracking-normal leading-[normal] `}>
-                        NoWaste
-                    </span>
-                </Link>
-                <nav aria-label="Navegação principal">
-                    <Link
-                        className={`${instrumentSans.className} inline-flex gap-6 items-center relative flex-[0_0_auto] font-medium text-[#556858] text-sm tracking-normal leading-[normal] hover:text-[#2d5a27] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2d5a27] focus-visible:ring-offset-2`}
-                        href="/inicio"
-                    >
-                        Voltar ao Início
-                    </Link>
-                </nav>
-            </header>
+            <Cabecalho onClickUrl="/inicio" onClickScreen="ao Início" ehInicio={false}/>
             <section
                 className="flex flex-col h-219.75 items-center justify-center pt-10 pb-20 px-0 relative self-stretch w-full"
                 aria-labelledby="login-title"
             >
                 <div className="flex flex-col w-120 items-center justify-center relative flex-[0_0_auto]">
-                    <Image
-                        className="absolute -top-30 right-0 w-60 h-60 object-cover"
-                        alt=""
-                        aria-hidden="true"
-                        src={folha}
-                    />
+                    <Folha/>
                     <div
                         className="absolute left-[calc(50.00%-190px)] -bottom-10 w-95 h-20 bg-[#e8efe9] rounded-[190px/40px] blur-[20px] opacity-50"
                         aria-hidden="true"
@@ -141,12 +115,7 @@ const TelaLogin = () => {
                                     Entrar
                                 </span>
                             </Link>
-                            <div className="inline-flex items-center justify-center gap-1.5 px-3 py-2 relative flex-[0_0_auto] bg-[#e8efe9] rounded-md">
-                                <Leaf className="w-3.5 h-3.5 text-[#2d5a27] shrink-0" />
-                                <span className={`${instrumentSans.className} relative w-fit -mt-px font-semibold text-[#2d5a27] text-xs tracking-normal leading-[normal]`}>
-                                    Desperdício zero com NoWaste
-                                </span>
-                            </div>
+                            <Slogan />
                             <div className={`${instrumentSans.className} inline-flex items-center gap-1 relative flex-[0_0_auto]`}>
                                 <span className="relative w-fit -mt-px font-normal text-[#556858] text-sm tracking-normal leading-[normal]">
                                     Novo por aqui?
