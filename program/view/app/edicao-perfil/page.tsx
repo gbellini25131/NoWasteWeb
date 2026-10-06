@@ -1,10 +1,8 @@
 'use client'
 
 import { SyntheticEvent, useState } from "react";
-import Link from "next/link";
-import { Leaf, LucideIcon, User, Mail, Smartphone, Lock } from "lucide-react";
+import { LucideIcon, User, Mail, Smartphone, Lock } from "lucide-react";
 import { fraunces, instrumentSans } from "@/util/Fonts";
-import Folha from "@/components/Folha";
 import Cabecalho from "@/components/Cabecalho";
 import Slogan from "@/components/Slogan";
 
@@ -127,12 +125,6 @@ const TelaEdicaoPerfil = () => {
             <Cabecalho onClickUrl="/navegacao" onClickScreen="à Tela Principal" ehInicio={false} />
             <main className="flex flex-col items-center justify-center py-10 px-4 w-full flex-1">
                 <div className="flex flex-col w-full max-w-150 items-center justify-center relative">
-                    <Folha />
-                    <div
-                        className="absolute left-[calc(50%-230px)] -bottom-10 w-115 h-20 bg-[#e8efe9] rounded-[230px/40px] blur-[20px] opacity-50 pointer-events-none"
-                        aria-hidden="true"
-                    />
-
                     <form
                         className="flex flex-col w-full max-w-140 items-stretch gap-7 p-6 sm:p-10 relative bg-white rounded-3xl shadow-[0px_16px_32px_#2d5a2710] z-10"
                         onSubmit={handleSubmit}
@@ -165,7 +157,7 @@ const TelaEdicaoPerfil = () => {
                                                 >
                                                     {field.label}
                                                 </label>
-                                                <div className="flex items-center gap-2 px-4 py-3 w-full bg-white rounded-lg border border-solid border-[#dce3dd] focus-within:border-[#2d5a27] focus-within:ring-1 focus-within:ring-[#2d5a27] transition-all">
+                                                <div className="flex items-center gap-2 px-4 py-3 w-full bg-white rounded-lg border border-solid border-[#dce3dd] focus-within:ring-1 focus-within:ring-[#2d5a27] transition-all">
                                                     <div
                                                         className="flex items-center justify-center w-5 h-5 text-[#556858] shrink-0"
                                                         aria-hidden="true"

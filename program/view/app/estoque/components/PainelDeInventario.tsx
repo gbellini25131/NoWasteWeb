@@ -1,22 +1,10 @@
 'use client'
 
-import { FormEvent, useState } from "react";
-import {
-    Apple,
-    Beef,
-    Leaf,
-    LucideIcon,
-    Milk,
-    Package,
-    Plus,
-    Sparkles,
-    Trash2,
-    Utensils,
-} from "lucide-react";
+import { useState } from "react";
+import {Apple, Beef, LucideIcon, Milk, Plus, Trash2, Utensils } from "lucide-react";
 import {fraunces, instrumentSans} from "@/util/Fonts";
 import Slogan from "@/components/Slogan";
 import Link from "next/link";
-import Folha from "@/components/Folha";
 
 type InventoryItem = {
     id: number;
@@ -96,8 +84,6 @@ const PainelDeInventario = () => {
         <>
             <section className="flex flex-col items-center justify-center pt-10 pb-15 px-0 relative self-stretch w-full flex-[0_0_auto]">
                 <div className="flex flex-col w-280 max-w-full items-center justify-center relative flex-[0_0_auto]">
-                    <Folha />
-                    <div className="absolute left-[calc(50.00%-490px)] -bottom-10 w-245 h-20 bg-[#e8efe9] rounded-[490px/40px] blur-[20px] opacity-50" />
                     <div className={`${instrumentSans.className} flex flex-col items-start gap-10 p-12 relative self-stretch w-full flex-[0_0_auto] bg-white rounded-3xl shadow-[0px_16px_32px_#2d5a2710]`}>
                         <header className="flex items-center justify-between relative self-stretch w-full flex-[0_0_auto]">
                             <div className="flex flex-col items-start gap-2 relative flex-1 grow">

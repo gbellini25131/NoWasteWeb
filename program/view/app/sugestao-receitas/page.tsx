@@ -2,9 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Leaf, Utensils, Salad, CakeSlice, Check, CookingPot, LucideIcon } from "lucide-react";
+import { Utensils, Salad, CakeSlice, Check, CookingPot, LucideIcon } from "lucide-react";
 import {fraunces, instrumentSans} from "@/util/Fonts";
-import Folha from "@/components/Folha";
 import Cabecalho from "@/components/Cabecalho";
 import Slogan from "@/components/Slogan";
 
@@ -48,12 +47,6 @@ const TelaSugestaoReceitas = () => {
             <Cabecalho onClickUrl="/navegacao" onClickScreen="à Tela Principal" ehInicio={false}/>
             <section className="flex flex-col flex-1 items-center justify-center pt-5 pb-15 px-0 relative self-stretch w-full">
                 <div className="flex flex-col w-160 items-center justify-center relative flex-[0_0_auto]">
-                    <Folha/>
-                    <div
-                        aria-hidden="true"
-                        className="absolute left-[calc(50.00%-250px)] -bottom-10 w-125 h-20 bg-[#e8efe9] rounded-[250px/40px] blur-[20px] opacity-50"
-                    />
-
                     <form
                         className="flex flex-col w-145 items-start gap-8 p-10 relative flex-[0_0_auto] bg-white rounded-3xl shadow-[0px_16px_32px_#2d5a2710]"
                         onSubmit={(event) => {

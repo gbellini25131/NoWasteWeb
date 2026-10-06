@@ -2,10 +2,9 @@
 
 import { JSX, useState } from "react";
 import Image, { ImageProps } from "next/image";
-import { Leaf, Timer, LoaderCircle } from "lucide-react";
+import { Timer, LoaderCircle } from "lucide-react";
 import { fraunces, instrumentSans } from "@/util/Fonts";
 import Cabecalho from "@/components/Cabecalho";
-import Folha from "@/components/Folha";
 import Link from "next/link";
 import Slogan from "@/components/Slogan";
 
@@ -219,13 +218,9 @@ const TelaReceitas = () => {
                 <Cabecalho onClickUrl="/navegacao" onClickScreen="à Tela Principal" ehInicio={false} />
             </div>
 
-            <section className="flex flex-col items-center justify-center pt-20 pb-20 px-0 relative self-stretch w-full flex-[0_0_auto] mt-6">
+            {/* Ajustado: removido mt-6 e reduzido pt-20 para pt-6 */}
+            <section className="flex flex-col items-center justify-center pt-6 pb-16 px-0 relative self-stretch w-full flex-[0_0_auto]">
                 <div className="flex flex-col w-280 max-w-[calc(100%-2rem)] items-center justify-center relative flex-[0_0_auto]">
-                    <Folha />
-                    <div
-                        className="absolute left-[calc(50.00%-490px)] -bottom-10 w-245 h-20 bg-[#e8efe9] rounded-[490px/40px] blur-[20px] opacity-50"
-                        aria-hidden="true"
-                    />
                     <div className="flex flex-col items-start gap-10 p-12 relative self-stretch w-full flex-[0_0_auto] bg-white rounded-3xl shadow-[0px_16px_32px_#2d5a2710]">
                         <div className="items-center justify-around flex relative self-stretch w-full flex-[0_0_auto]">
                             <div className="flex flex-col items-start gap-2 relative flex-1 grow">
