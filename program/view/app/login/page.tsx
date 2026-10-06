@@ -3,8 +3,7 @@
 import {SyntheticEvent, useState} from "react";
 import {fraunces, instrumentSans} from "@/util/Fonts";
 import Link from "next/link";
-import { Leaf, Lock, Mail } from "lucide-react";
-import Folha from "@/components/Folha";
+import { Lock, Mail } from "lucide-react";
 import Cabecalho from "@/components/Cabecalho";
 import Slogan from "@/components/Slogan";
 
@@ -19,20 +18,15 @@ const TelaLogin = () => {
     };
 
     return (
-        <main className={`flex flex-col min-h-256 items-center relative bg-[#f7f9f6]`}>
+        <div className="flex flex-col min-h-screen relative bg-[#f7f9f6]">
             <Cabecalho onClickUrl="/inicio" onClickScreen="ao Início" ehInicio={false}/>
-            <section
-                className="flex flex-col h-219.75 items-center justify-center pt-10 pb-20 px-0 relative self-stretch w-full"
+            <main
+                className="flex-1 flex flex-col items-center justify-center py-6 px-4 w-full"
                 aria-labelledby="login-title"
             >
-                <div className="flex flex-col w-120 items-center justify-center relative flex-[0_0_auto]">
-                    <Folha/>
-                    <div
-                        className="absolute left-[calc(50.00%-190px)] -bottom-10 w-95 h-20 bg-[#e8efe9] rounded-[190px/40px] blur-[20px] opacity-50"
-                        aria-hidden="true"
-                    />
+                <div className="flex flex-col w-120 max-w-full items-center justify-center relative flex-[0_0_auto]">
                     <form
-                        className="flex-col w-110 items-start gap-8 p-10 bg-white rounded-3xl shadow-[0px_16px_32px_#2d5a2710] flex relative flex-[0_0_auto]"
+                        className="flex-col w-110 max-w-[calc(100vw-2rem)] items-start gap-8 p-10 bg-white rounded-3xl shadow-[0px_16px_32px_#2d5a2710] flex relative flex-[0_0_auto]"
                         onSubmit={handleSubmit}
                     >
                         <div className="flex flex-col items-center gap-3 relative self-stretch w-full flex-[0_0_auto]">
@@ -108,9 +102,9 @@ const TelaLogin = () => {
                         </div>
                         <div className="flex flex-col items-center gap-6 relative self-stretch w-full flex-[0_0_auto]">
                             <Link
-                                    href="/navegacao"
-                                    className="items-center justify-center px-0 py-3.5 self-stretch w-full bg-[#2d5a27] rounded-[10px] flex relative flex-[0_0_auto] hover:bg-[#24491f] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2d5a27] focus-visible:ring-offset-2 cursor-pointer"
-                                >
+                                href="/navegacao"
+                                className="items-center justify-center px-0 py-3.5 self-stretch w-full bg-[#2d5a27] rounded-[10px] flex relative flex-[0_0_auto] hover:bg-[#24491f] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2d5a27] focus-visible:ring-offset-2 cursor-pointer"
+                            >
                                 <span className={`${instrumentSans.className} relative w-fit -mt-px font-semibold text-white text-base tracking-normal leading-[normal]`}>
                                     Entrar
                                 </span>
@@ -133,8 +127,8 @@ const TelaLogin = () => {
                         </div>
                     </form>
                 </div>
-            </section>
-        </main>
+            </main>
+        </div>
     );
 };
 

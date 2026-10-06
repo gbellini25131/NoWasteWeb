@@ -93,7 +93,7 @@ const RecipeCard = ({ recipe, onViewRecipe }: RecipeCardProps): JSX.Element => {
                     height={180}
                 />
                 <div className="flex flex-col items-start gap-3 p-5 w-full flex-[0_0_auto] relative self-stretch">
-                    <h2 className={`${fraunces.className} -mt-px font-['Fraunces-Bold',Helvetica] font-bold text-[#1e291f] text-xl tracking-normal leading-[normal] relative self-stretch`}>
+                    <h2 className={`${fraunces.className} -mt-px font-bold text-[#1e291f] text-xl tracking-normal leading-[normal] relative self-stretch`}>
                         {recipe.title}
                     </h2>
                     <div
@@ -158,7 +158,7 @@ const RecipeDialog = ({ recipe, onClose }: RecipeDialogProps): JSX.Element => {
             >
                 <div className="flex items-start justify-between gap-6">
                     <div>
-                        <p className="font-['Instrument_Sans-Medium',Helvetica] text-sm text-[#556858]">
+                        <p className="text-sm text-[#556858]">
                             Receita sugerida
                         </p>
                         <h2

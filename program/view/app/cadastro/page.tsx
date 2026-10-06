@@ -2,9 +2,8 @@
 
 import {FormEvent, useState} from "react";
 import Link from "next/link";
-import { User, Mail, Lock, Leaf, CheckCircle2, LucideIcon } from "lucide-react";
+import { User, Mail, Lock, LucideIcon } from "lucide-react";
 import {fraunces, instrumentSans} from "@/util/Fonts";
-import Folha from "@/components/Folha";
 import Cabecalho from "@/components/Cabecalho";
 import Slogan from "@/components/Slogan";
 
@@ -88,22 +87,17 @@ const TelaCadastro = () => {
     };
 
     return (
-        <main className="flex flex-col min-h-256 items-center relative bg-[#f7f9f6] ${fraunces.className}">
+        <div className="flex flex-col min-h-screen relative bg-[#f7f9f6]">
             <Cabecalho onClickUrl="/inicio" onClickScreen="ao Início" ehInicio={false} />
-            <section
+            <main
                 aria-labelledby="registration-title"
-                className="flex flex-col h-219.75 items-center justify-center pt-10 pb-20 px-0 relative self-stretch w-full"
+                className="flex-1 flex flex-col items-center justify-center py-6 px-4 w-full"
             >
-                <div className="flex flex-col w-120 items-center justify-center relative flex-[0_0_auto]">
-                    <Folha />
-                    <div
-                        aria-hidden="true"
-                        className="absolute left-[calc(50.00%-190px)] -bottom-10 w-95 h-20 bg-[#e8efe9] rounded-[190px/40px] blur-[20px] opacity-50"
-                    />
+                <div className="flex flex-col w-120 max-w-full items-center justify-center relative flex-[0_0_auto]">
                     <form
                         onSubmit={handleSubmit}
                         noValidate={false}
-                        className={`${instrumentSans.className} flex-col w-110 items-start gap-7 p-10 bg-white rounded-3xl shadow-[0px_16px_32px_#2d5a2710] flex relative flex-[0_0_auto]`}
+                        className={`${instrumentSans.className} flex-col w-110 max-w-[calc(100vw-2rem)] items-start gap-7 p-10 bg-white rounded-3xl shadow-[0px_16px_32px_#2d5a2710] flex relative flex-[0_0_auto]`}
                     >
                         <div className="flex flex-col items-center gap-3 relative self-stretch w-full flex-[0_0_auto]">
                             <h1
@@ -177,8 +171,8 @@ const TelaCadastro = () => {
                         </div>
                     </form>
                 </div>
-            </section>
-        </main>
+            </main>
+        </div>
     );
 };
 

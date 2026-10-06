@@ -100,7 +100,7 @@ const PainelDeInventario = () => {
                                 aria-label="Adicionar novo produto"
                             >
                                 <Plus className="w-4 h-4 text-white" aria-hidden="true" />
-                                <span className="font-['Instrument_Sans-SemiBold',Helvetica] font-semibold text-white text-[15px] whitespace-nowrap">
+                                <span className={`${instrumentSans.className} font-semibold text-white text-[15px] whitespace-nowrap`}>
                                   Adicionar Produto
                                 </span>
                             </Link>
@@ -137,10 +137,10 @@ const PainelDeInventario = () => {
                                                 <h2 className={`${fraunces.className} font-bold text-[#1e291f] text-lg`}>
                                                     {item.name}
                                                 </h2>
-                                                <p className="font-['Instrument_Sans-Regular',Helvetica] font-normal text-[#556858] text-sm">
+                                                <p className="font-normal text-[#556858] text-sm">
                                                     Validade:{" "}
                                                     <time
-                                                        className={`font-['Instrument_Sans-SemiBold',Helvetica] font-semibold ${
+                                                        className={`font-semibold ${
                                                             item.status === "Vence em breve"
                                                                 ? "text-[#e65100]"
                                                                 : "text-[#1e291f]"
@@ -154,7 +154,7 @@ const PainelDeInventario = () => {
                                             <div className="w-full h-px bg-[#dce3dd]" />
 
                                             <div className="flex items-center justify-between relative self-stretch w-full flex-[0_0_auto]">
-                                                <span className="font-['Instrument_Sans-Regular',Helvetica] font-normal text-[#556858] text-[13px]">
+                                                <span className="font-normal text-[#556858] text-[13px]">
                                                   {item.category}
                                                 </span>
                                                 <button
@@ -164,7 +164,7 @@ const PainelDeInventario = () => {
                                                     aria-label={`Excluir ${item.name}`}
                                                 >
                                                     <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
-                                                    <span className="font-['Instrument_Sans-SemiBold',Helvetica] font-semibold text-sm">
+                                                    <span className="font-semibold text-sm">
                                                         Excluir
                                                     </span>
                                                 </button>

@@ -1,10 +1,9 @@
 'use client'
 
 import Link from "next/link";
-import { Leaf, UserKey, UserPlus } from "lucide-react";
+import { UserKey, UserPlus } from "lucide-react";
 import { fraunces, instrumentSans } from "@/util/Fonts"
 
-import Folha from "@/components/Folha";
 import Cabecalho from "@/components/Cabecalho";
 import Slogan from "@/components/Slogan";
 
@@ -34,15 +33,10 @@ const accessOptions: AccessOption[] = [
 
 const TelaInicio = () => {
     return (
-        <div className="flex flex-col min-h-256 items-center relative bg-[#f7f9f6]">
+        <div className="flex flex-col min-h-screen relative bg-[#f7f9f6]">
             <Cabecalho onClickUrl="" onClickScreen="" ehInicio={true}/>
-            <main className="flex flex-col h-219.75 items-center justify-center pt-10 pb-20 px-0 relative self-stretch w-full">
+            <main className="flex-1 flex flex-col items-center justify-center py-6 px-4 w-full">
                 <div className="flex flex-col w-160 max-w-full items-center justify-center relative flex-[0_0_auto]">
-                    <Folha />
-                    <div
-                        aria-hidden="true"
-                        className="absolute left-[calc(50.00%-260px)] -bottom-10 w-130 h-20 bg-[#e8efe9] rounded-[260px/40px] blur-[20px] opacity-50"
-                    />
                     <section
                         aria-labelledby="welcome-heading"
                         className="flex flex-col w-150 max-w-[calc(100vw-2rem)] items-start gap-8 p-10 relative flex-[0_0_auto] bg-white rounded-3xl shadow-[0px_16px_32px_#2d5a2710]"
