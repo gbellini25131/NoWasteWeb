@@ -1,7 +1,8 @@
 'use client'
 
-import { SyntheticEvent, useState } from "react";
-import { LucideIcon, User, Mail, Smartphone, Lock } from "lucide-react";
+import { SyntheticEvent, useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { LucideIcon, User, Mail, Lock, Loader2 } from "lucide-react";
 import { fraunces, instrumentSans } from "@/util/Fonts";
 import Cabecalho from "@/components/Cabecalho";
 import Slogan from "@/components/Slogan";
@@ -9,7 +10,6 @@ import Slogan from "@/components/Slogan";
 type FormValues = {
     name: string;
     email: string;
-    phone: string;
     currentPassword: string;
     newPassword: string;
     confirmPassword: string;
@@ -27,7 +27,6 @@ type FormField = {
 const initialFormValues: FormValues = {
     name: "",
     email: "",
-    phone: "",
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
@@ -53,14 +52,6 @@ const formRows: FormField[][] = [
         },
     ],
     [
-        {
-            id: "phone",
-            label: "Telefone",
-            placeholder: "(00) 00000-0000",
-            type: "tel",
-            icon: Smartphone,
-            autoComplete: "tel",
-        },
         {
             id: "currentPassword",
             label: "Senha atual",
@@ -91,33 +82,121 @@ const formRows: FormField[][] = [
 ];
 
 const TelaEdicaoPerfil = () => {
+    const router = useRouter();
     const [formValues, setFormValues] = useState<FormValues>(initialFormValues);
-    const [submitted, setSubmitted] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            const userId = localStorage.getItem("userId");
+            const token = localStorage.getItem("authToken");
+
+            if (!userId) {
+                setErrorMessage("Utilizador não identificado. Por favor, faça login novamente.");
+                return;
+            }
+
+            setIsLoading(true);
+            try {
+                const response = await fetch(`http://localhost:5020/usuarios/${userId}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                    },
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || "Erro ao carregar dados do utilizador.");
+                }
+
+                setFormValues((prev) => ({
+                    ...prev,
+                    name: data.nome || data.name || "",
+                    email: data.email || "",
+                }));
+            } catch (error: any) {
+                console.error("Erro ao carregar utilizador:", error);
+                setErrorMessage("Não foi possível carregar os dados atuais.");
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchUserData();
+    }, []);
 
     const handleChange = (id: keyof FormValues, value: string): void => {
-        setSubmitted(false);
+        setErrorMessage("");
+        setSuccessMessage("");
         setFormValues((currentValues) => ({
             ...currentValues,
             [id]: value,
         }));
     };
 
-    const handleSubmit = (event: SyntheticEvent): void => {
+    const handleSubmit = async (event: SyntheticEvent): Promise<void> => {
         event.preventDefault();
+        setErrorMessage("");
+        setSuccessMessage("");
 
         if (
             formValues.newPassword &&
             formValues.newPassword !== formValues.confirmPassword
         ) {
+            setErrorMessage("A nova senha e a confirmação não coincidem.");
             return;
         }
 
-        setSubmitted(true);
+        setIsLoading(true);
+
+        try {
+            const userId = localStorage.getItem("userId");
+            const token = localStorage.getItem("authToken");
+
+            const response = await fetch(`http://localhost:5020/usuarios/${userId}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                },
+                body: JSON.stringify({
+                    nome: formValues.name,
+                    email: formValues.email,
+                    senhaAtual: formValues.currentPassword,
+                    senha: formValues.newPassword || formValues.currentPassword,
+                }),
+            });
+
+            const data = await response.json().catch(() => null);
+
+            if (!response.ok) {
+                throw new Error(
+                    data?.message || "Erro ao atualizar perfil. Verifique seus dados."
+                );
+            }
+
+            setSuccessMessage("Perfil atualizado com sucesso!");
+
+            setFormValues((prev) => ({
+                ...prev,
+                currentPassword: "",
+                newPassword: "",
+                confirmPassword: "",
+            }));
+        } catch (error: any) {
+            setErrorMessage(error.message || "Ocorreu um erro ao atualizar o perfil.");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const handleCancel = (): void => {
-        setFormValues(initialFormValues);
-        setSubmitted(false);
+        router.push("/navegacao");
     };
 
     return (
@@ -138,10 +217,34 @@ const TelaEdicaoPerfil = () => {
                             </p>
                         </div>
 
+                        {/* Banner de Erro */}
+                        {errorMessage && (
+                            <div
+                                className="w-full p-3.5 rounded-lg border font-bold text-sm text-center shadow-sm"
+                                style={{ backgroundColor: '#f8d7da', color: '#842029', borderColor: '#f5c2c7' }}
+                            >
+                                {errorMessage}
+                            </div>
+                        )}
+
+                        {/* Banner de Sucesso */}
+                        {successMessage && (
+                            <div
+                                className="w-full p-3.5 rounded-lg border font-bold text-sm text-center shadow-sm"
+                                style={{ backgroundColor: '#d1e7dd', color: '#0f5132', borderColor: '#badbcc' }}
+                            >
+                                {successMessage}
+                            </div>
+                        )}
+
                         <div className="flex flex-col gap-5 w-full">
                             {formRows.map((row, rowIndex) => (
                                 <div
-                                    className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full"
+                                    className={
+                                        row.length > 1
+                                            ? "grid grid-cols-1 sm:grid-cols-2 gap-4 w-full"
+                                            : "w-full"
+                                    }
                                     key={`form-row-${rowIndex}`}
                                 >
                                     {row.map((field) => {
@@ -186,12 +289,17 @@ const TelaEdicaoPerfil = () => {
 
                         <div className="flex flex-col items-center gap-4 w-full">
                             <button
-                                className="flex items-center justify-center py-3.5 w-full bg-[#2d5a27] rounded-[10px] cursor-pointer transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-[#2d5a27]"
+                                className="flex items-center justify-center py-3.5 w-full bg-[#2d5a27] hover:bg-[#24491f] disabled:bg-[#2d5a27]/60 rounded-[10px] cursor-pointer transition-all focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-[#2d5a27]"
                                 type="submit"
+                                disabled={isLoading}
                             >
-                                <span className={`${instrumentSans.className} font-semibold text-white text-[15px]`}>
-                                    Salvar Alterações
-                                </span>
+                                {isLoading ? (
+                                    <Loader2 className="w-5 h-5 text-white animate-spin" />
+                                ) : (
+                                    <span className={`${instrumentSans.className} font-semibold text-white text-[15px]`}>
+                                        Salvar Alterações
+                                    </span>
+                                )}
                             </button>
                             <button
                                 className="flex items-center justify-center py-3.5 w-full rounded-[10px] border border-solid border-[#2d5a27] bg-transparent cursor-pointer transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-[#2d5a27]"

@@ -1,9 +1,10 @@
 'use client';
 
-import {FormEvent, useState} from "react";
+import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation"; // 1. Importado o roteador do Next.js
 import Link from "next/link";
-import { User, Mail, Lock, LucideIcon } from "lucide-react";
-import {fraunces, instrumentSans} from "@/util/Fonts";
+import { User, Mail, Lock, LucideIcon, Loader2 } from "lucide-react"; // Importado o Loader2
+import { fraunces, instrumentSans } from "@/util/Fonts";
 import Cabecalho from "@/components/Cabecalho";
 import Slogan from "@/components/Slogan";
 
@@ -52,38 +53,62 @@ const fields: FieldDefinition[] = [
 ];
 
 const TelaCadastro = () => {
+    const router = useRouter(); // 2. Instância do router
+
     const [formValues, setFormValues] = useState<Record<string, string>>({});
-    const [submitted, setSubmitted] = useState(false);
+    const [isLoading, setIsLoading] = useState(false); // Estado para controlar o carregamento
+    const [errorMessage, setErrorMessage] = useState(""); // Estado para guardar mensagens de erro
 
     const handleChange = (id: string, value: string) => {
         setFormValues((currentValues) => ({
             ...currentValues,
             [id]: value,
         }));
-        setSubmitted(false);
+        setErrorMessage("");
     };
 
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        setErrorMessage("");
 
-        const form = event.currentTarget;
-        if (!form.checkValidity()) {
-            form.reportValidity();
-            return;
-        }
-
+        // Validação local: verificação se as senhas coincidem
         if (formValues.password !== formValues["confirm-password"]) {
-            const confirmationInput = form.elements.namedItem(
-                "confirm-password",
-            ) as HTMLInputElement | null;
-
-            confirmationInput?.setCustomValidity("As senhas precisam ser iguais.");
-            confirmationInput?.reportValidity();
-            confirmationInput?.setCustomValidity("");
+            setErrorMessage("As senhas não coincidem.");
             return;
         }
 
-        setSubmitted(true);
+        setIsLoading(true);
+
+        try {
+            // 3. Chamada para o endpoint de cadastro de usuários da sua API
+            const response = await fetch("http://localhost:5020/usuarios", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                // Mapeamento das chaves do formulário para o formato JSON esperado pela sua API
+                body: JSON.stringify({
+                    nome: formValues["full-name"],
+                    email: formValues.email,
+                    senha: formValues.password,
+                }),
+            });
+
+            const data = await response.json().catch(() => null);
+
+            if (!response.ok) {
+                throw new Error(
+                    data?.message || "Erro ao realizar o cadastro. Verifique os dados e tente novamente."
+                );
+            }
+
+            // 4. Redireciona para a tela de login após cadastrar com sucesso
+            router.push("/navegacao");
+        } catch (error: any) {
+            setErrorMessage(error.message || "Ocorreu um erro inesperado ao cadastrar.");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -96,7 +121,6 @@ const TelaCadastro = () => {
                 <div className="flex flex-col w-120 max-w-full items-center justify-center relative flex-[0_0_auto]">
                     <form
                         onSubmit={handleSubmit}
-                        noValidate={false}
                         className={`${instrumentSans.className} flex-col w-110 max-w-[calc(100vw-2rem)] items-start gap-7 p-10 bg-white rounded-3xl shadow-[0px_16px_32px_#2d5a2710] flex relative flex-[0_0_auto]`}
                     >
                         <div className="flex flex-col items-center gap-3 relative self-stretch w-full flex-[0_0_auto]">
@@ -111,6 +135,14 @@ const TelaCadastro = () => {
                                 cadastrais
                             </p>
                         </div>
+
+                        {/* Alerta para exibição de erros do formulário ou da API */}
+                        {errorMessage && (
+                            <div className="w-full p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm text-center">
+                                {errorMessage}
+                            </div>
+                        )}
+
                         <div className="flex flex-col items-start gap-4 relative self-stretch w-full flex-[0_0_auto]">
                             {fields.map((field) => {
                                 const IconComponent = field.icon;
@@ -125,7 +157,7 @@ const TelaCadastro = () => {
                                         >
                                             {field.label}
                                         </label>
-                                        <div className="flex items-center gap-2 px-4 py-3 relative self-stretch w-full flex-[0_0_auto] bg-white rounded-lg border border-solid border-[#dce3dd]">
+                                        <div className="flex items-center gap-2 px-4 py-3 relative self-stretch w-full flex-[0_0_auto] bg-white rounded-lg border border-solid border-[#dce3dd] focus-within:ring-1 focus-within:ring-[#2d5a27]">
                                             <span className="flex items-center justify-center shrink-0 w-5 h-5 text-[#556858]">
                                                 <IconComponent className="w-4.5 h-4.5" />
                                             </span>
@@ -148,14 +180,21 @@ const TelaCadastro = () => {
                             })}
                         </div>
                         <div className="flex flex-col items-center gap-6 relative self-stretch w-full flex-[0_0_auto]">
-                            <Link
-                                href="/navegacao"
-                                className="items-center justify-center px-0 py-3.5 self-stretch w-full bg-[#2d5a27] rounded-[10px] flex relative flex-[0_0_auto] cursor-pointer"
+                            {/* Botão de envio com estado de carregamento */}
+                            <button
+                                type="submit"
+                                disabled={isLoading}
+                                className="items-center justify-center px-0 py-3.5 self-stretch w-full bg-[#2d5a27] hover:bg-[#24491f] disabled:bg-[#2d5a27]/60 rounded-[10px] flex relative flex-[0_0_auto] cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2d5a27] focus-visible:ring-offset-2 transition-colors"
                             >
-                                <span className="relative w-fit -mt-px font-semibold text-white text-base tracking-normal leading-[normal]">
-                                    Criar Conta
-                                </span>
-                            </Link>
+                                {isLoading ? (
+                                    <Loader2 className="w-5 h-5 text-white animate-spin" />
+                                ) : (
+                                    <span className="relative w-fit -mt-px font-semibold text-white text-base tracking-normal leading-[normal]">
+                                        Criar Conta
+                                    </span>
+                                )}
+                            </button>
+
                             <Slogan />
                             <div className="inline-flex items-center gap-1 relative flex-[0_0_auto]">
                                 <span className="relative w-fit -mt-px font-normal text-[#556858] text-sm tracking-normal leading-[normal]">

@@ -1,20 +1,58 @@
 'use client';
 
-import {SyntheticEvent, useState} from "react";
-import {fraunces, instrumentSans} from "@/util/Fonts";
+import { SyntheticEvent, useState } from "react";
+import { useRouter } from "next/navigation";
+import { fraunces, instrumentSans } from "@/util/Fonts";
 import Link from "next/link";
-import { Lock, Mail } from "lucide-react";
+import { Lock, Mail, Loader2 } from "lucide-react";
 import Cabecalho from "@/components/Cabecalho";
 import Slogan from "@/components/Slogan";
 
 const TelaLogin = () => {
+    const router = useRouter();
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [submitted, setSubmitted] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
-    const handleSubmit = (event: SyntheticEvent) => {
+    const handleSubmit = async (event: SyntheticEvent) => {
         event.preventDefault();
-        setSubmitted(true);
+        setIsLoading(true);
+        setErrorMessage("");
+
+        try {
+            const response = await fetch("http://localhost:5020/usuarios/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email: email,
+                    senha: password
+                }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || "Erro ao realizar o login. Verifique suas credenciais.");
+            }
+
+            if (data.token) {
+                localStorage.setItem("authToken", data.token);
+            }
+
+            if (data.idUsuario) {
+                localStorage.setItem("userId", String(data.idUsuario));
+            }
+
+            router.push("/navegacao");
+        } catch (error: any) {
+            setErrorMessage(error.message || "Ocorreu um erro inesperado.");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -40,6 +78,14 @@ const TelaLogin = () => {
                                 Entre na sua conta NoWaste informando email e senha
                             </p>
                         </div>
+
+                        {/* Exibição de mensagem de erro */}
+                        {errorMessage && (
+                            <div className="w-full p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm text-center">
+                                {errorMessage}
+                            </div>
+                        )}
+
                         <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
                             <div className="flex flex-col items-start gap-2 relative self-stretch w-full flex-[0_0_auto]">
                                 <label
@@ -93,7 +139,7 @@ const TelaLogin = () => {
                                 <div className="flex items-start justify-end relative self-stretch w-full flex-[0_0_auto]">
                                     <Link
                                         className={`${instrumentSans.className} relative w-fit -mt-px font-medium text-[#2d5a27] text-[13px] tracking-normal leading-[normal] hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2d5a27]`}
-                                        href=""
+                                        href="/recuperar-senha"
                                     >
                                         Esqueceu sua senha?
                                     </Link>
@@ -101,14 +147,21 @@ const TelaLogin = () => {
                             </div>
                         </div>
                         <div className="flex flex-col items-center gap-6 relative self-stretch w-full flex-[0_0_auto]">
-                            <Link
-                                href="/navegacao"
-                                className="items-center justify-center px-0 py-3.5 self-stretch w-full bg-[#2d5a27] rounded-[10px] flex relative flex-[0_0_auto] hover:bg-[#24491f] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2d5a27] focus-visible:ring-offset-2 cursor-pointer"
+                            {/* Troca do componente Link por um botão de Submit real */}
+                            <button
+                                type="submit"
+                                disabled={isLoading}
+                                className="items-center justify-center px-0 py-3.5 self-stretch w-full bg-[#2d5a27] hover:bg-[#24491f] disabled:bg-[#2d5a27]/60 rounded-[10px] flex relative flex-[0_0_auto] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2d5a27] focus-visible:ring-offset-2 cursor-pointer transition-colors"
                             >
-                                <span className={`${instrumentSans.className} relative w-fit -mt-px font-semibold text-white text-base tracking-normal leading-[normal]`}>
-                                    Entrar
-                                </span>
-                            </Link>
+                                {isLoading ? (
+                                    <Loader2 className="w-5 h-5 text-white animate-spin" />
+                                ) : (
+                                    <span className={`${instrumentSans.className} relative w-fit -mt-px font-semibold text-white text-base tracking-normal leading-[normal]`}>
+                                        Entrar
+                                    </span>
+                                )}
+                            </button>
+
                             <Slogan />
                             <div className={`${instrumentSans.className} inline-flex items-center gap-1 relative flex-[0_0_auto]`}>
                                 <span className="relative w-fit -mt-px font-normal text-[#556858] text-sm tracking-normal leading-[normal]">
@@ -121,9 +174,6 @@ const TelaLogin = () => {
                                     Crie sua conta
                                 </Link>
                             </div>
-                            <span className="sr-only" aria-live="polite">
-                                {submitted ? "Formulário enviado." : ""}
-                            </span>
                         </div>
                     </form>
                 </div>
