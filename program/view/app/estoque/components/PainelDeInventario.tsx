@@ -1,84 +1,35 @@
 'use client'
 
-import { useState } from "react";
-import {Apple, Beef, LucideIcon, Milk, Plus, Trash2, Utensils } from "lucide-react";
+import { useEffect, useState } from "react";
+import {Apple, Beef, Milk, Plus, Trash2, Utensils } from "lucide-react";
 import {fraunces, instrumentSans} from "@/util/Fonts";
 import Slogan from "@/components/Slogan";
 import Link from "next/link";
-
-type InventoryItem = {
-    id: number;
-    name: string;
-    expiration: string;
-    category: string;
-    icon: LucideIcon;
-    iconBackground: string;
-    status: "Vence em breve" | "Dentro da validade";
-};
-
-const initialInventory: InventoryItem[] = [
-    {
-        id: 1,
-        name: "Leite Integral",
-        expiration: "31/08/2026",
-        category: "Laticínios",
-        icon: Milk,
-        iconBackground: "bg-[#e3f2fd]",
-        status: "Vence em breve",
-    },
-    {
-        id: 2,
-        name: "Queijo Mussarela",
-        expiration: "03/09/2026",
-        category: "Laticínios",
-        icon: Utensils,
-        iconBackground: "bg-[#fffde7]",
-        status: "Vence em breve",
-    },
-    {
-        id: 3,
-        name: "Iogurte Natural",
-        expiration: "15/09/2026",
-        category: "Laticínios",
-        icon: Milk,
-        iconBackground: "bg-[#f3e5f5]",
-        status: "Dentro da validade",
-    },
-    {
-        id: 4,
-        name: "Peito de Frango",
-        expiration: "29/08/2026",
-        category: "Carnes",
-        icon: Beef,
-        iconBackground: "bg-[#ffebee]",
-        status: "Vence em breve",
-    },
-    {
-        id: 5,
-        name: "Tomate Cereja",
-        expiration: "10/09/2026",
-        category: "Hortifruti",
-        icon: Apple,
-        iconBackground: "bg-[#e8f5e9]",
-        status: "Dentro da validade",
-    },
-    {
-        id: 6,
-        name: "Manteiga Aviação",
-        expiration: "20/09/2026",
-        category: "Laticínios",
-        icon: Utensils,
-        iconBackground: "bg-[#fff8e1]",
-        status: "Dentro da validade",
-    },
-];
+import { backend, CategoriaApi, formatarData, ProdutoApi } from "@/util/api";
 
 const PainelDeInventario = () => {
-    const [inventory, setInventory] = useState<InventoryItem[]>(initialInventory);
+    const [inventory, setInventory] = useState<ProdutoApi[]>([]);
+    const [categorias, setCategorias] = useState<CategoriaApi[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
 
-    const removeProduct = (id: number) => {
-        setInventory((items) => items.filter((item) => item.id !== id));
+    useEffect(() => {
+        Promise.all([backend<ProdutoApi[]>("produtos"), backend<CategoriaApi[]>("categorias")])
+            .then(([produtos, lista]) => { setInventory(produtos); setCategorias(lista); })
+            .catch((e: Error) => setError(e.message))
+            .finally(() => setLoading(false));
+    }, []);
+
+    const removeProduct = async (id: number, nome: string) => {
+        if (!window.confirm(`Excluir ${nome} do estoque?`)) return;
+        setError("");
+        try {
+            await backend(`produtos/${id}`, { method: "DELETE" });
+            setInventory((items) => items.filter((item) => item.idProduto !== id));
+        } catch (e) { setError(e instanceof Error ? e.message : "Não foi possível excluir o produto."); }
     };
+
+    const hoje = new Date().toLocaleDateString("sv-SE");
 
     return (
         <>
@@ -107,61 +58,70 @@ const PainelDeInventario = () => {
                         </header>
 
                         <div className="flex flex-col items-start gap-6 relative self-stretch w-full flex-[0_0_auto]">
-                            <div className="grid grid-cols-3 items-start gap-6 relative self-stretch w-full">
+                            {error && <p role="alert" className="text-red-700">{error}</p>}
+                            {loading && <p className="text-[#556858]">Carregando seu estoque...</p>}
+                            {!loading && !error && inventory.length === 0 && <p className="text-[#556858]">Seu estoque está vazio. Adicione seu primeiro produto.</p>}
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-start gap-6 relative self-stretch w-full">
                                 {inventory.map((item) => {
-                                    const ItemIcon = item.icon;
+                                    const categoria = categorias.find((c) => c.idCategoria === item.idCategoria)?.nome || "Sem categoria";
+                                    const ItemIcon = /leite|latic|iogurte/i.test(categoria) ? Milk :
+                                        /carne|frango|peixe/i.test(categoria) ? Beef :
+                                        /horti|fruta|legume/i.test(categoria) ? Apple : Utensils;
+                                    const validade = item.dataValidade.slice(0, 10);
+                                    const diasRestantes = Math.ceil((new Date(`${validade}T00:00:00`).getTime() - new Date(`${hoje}T00:00:00`).getTime()) / 86400000);
+                                    const status = diasRestantes < 0 ? "Vencido" : diasRestantes <= 7 ? "Vence em breve" : "Dentro da validade";
                                     return (
-                                        <Link
-                                            href="/edicao-produto"
-                                            key={item.id}
+                                        <article
+                                            key={item.idProduto}
                                             className={`${instrumentSans.className} gap-5 p-6 flex-1 grow bg-white rounded-2xl border border-solid border-[#dce3dd] flex flex-col items-start relative min-w-0`}
                                         >
                                             <div className="flex items-center justify-between relative self-stretch w-full flex-[0_0_auto]">
                                                 <div
-                                                    className={`flex w-12 h-12 items-center justify-center rounded-3xl ${item.iconBackground}`}
+                                                    className="flex w-12 h-12 items-center justify-center rounded-3xl bg-[#e8efe9]"
                                                 >
                                                     <ItemIcon className="w-6 h-6 text-[#1e291f]" aria-hidden="true" />
                                                 </div>
                                                 <span
                                                     className={`inline-flex items-start px-3 py-1.5 relative flex-[0_0_auto] rounded-[20px] font-semibold text-xs ${
-                                                        item.status === "Vence em breve"
+                                                        status === "Vence em breve" || status === "Vencido"
                                                             ? "bg-[#fff3e0] text-[#e65100]"
                                                             : "bg-[#e8efe9] text-[#2d5a27]"
                                                     }`}
                                                 >
-                                                  {item.status}
+                                                  {status}
                                                 </span>
                                             </div>
 
                                             <div className="gap-1.5 self-stretch w-full flex-[0_0_auto] flex flex-col items-start relative">
                                                 <h2 className={`${fraunces.className} font-bold text-[#1e291f] text-lg`}>
-                                                    {item.name}
+                                                    <Link href={`/edicao-produto?id=${item.idProduto}`} className="hover:underline">{item.nome}</Link>
                                                 </h2>
                                                 <p className="font-normal text-[#556858] text-sm">
                                                     Validade:{" "}
                                                     <time
                                                         className={`font-semibold ${
-                                                            item.status === "Vence em breve"
+                                                            status !== "Dentro da validade"
                                                                 ? "text-[#e65100]"
                                                                 : "text-[#1e291f]"
                                                         }`}
                                                     >
-                                                        {item.expiration}
+                                                        {formatarData(item.dataValidade)}
                                                     </time>
                                                 </p>
+                                                <p className="text-sm text-[#556858]">Quantidade: {item.quantidade}</p>
                                             </div>
 
                                             <div className="w-full h-px bg-[#dce3dd]" />
 
                                             <div className="flex items-center justify-between relative self-stretch w-full flex-[0_0_auto]">
                                                 <span className="font-normal text-[#556858] text-[13px]">
-                                                  {item.category}
+                                                  {categoria}
                                                 </span>
                                                 <button
                                                     type="button"
-                                                    onClick={() => removeProduct(item.id)}
+                                                    onClick={() => removeProduct(item.idProduto, item.nome)}
                                                     className="inline-flex items-center gap-1 relative flex-[0_0_auto] text-[#d32f2f] hover:text-[#a92323] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d32f2f] focus-visible:ring-offset-2 rounded"
-                                                    aria-label={`Excluir ${item.name}`}
+                                                    aria-label={`Excluir ${item.nome}`}
                                                 >
                                                     <Trash2 className="w-3.5 h-3.5" aria-hidden="true" />
                                                     <span className="font-semibold text-sm">
@@ -169,7 +129,7 @@ const PainelDeInventario = () => {
                                                     </span>
                                                 </button>
                                             </div>
-                                        </Link>
+                                        </article>
                                     );
                                 })}
                             </div>

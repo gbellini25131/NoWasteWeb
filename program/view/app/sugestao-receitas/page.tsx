@@ -1,11 +1,12 @@
 'use client';
 
 import { useState } from "react";
-import Link from "next/link";
 import { Utensils, Salad, CakeSlice, Check, CookingPot, LucideIcon } from "lucide-react";
 import {fraunces, instrumentSans} from "@/util/Fonts";
 import Cabecalho from "@/components/Cabecalho";
 import Slogan from "@/components/Slogan";
+import { useRouter } from "next/navigation";
+import { getSession } from "@/util/api";
 
 type RecipeOption = {
     count: number;
@@ -32,14 +33,15 @@ const recipeOptions: RecipeOption[] = [
 ];
 
 const TelaSugestaoReceitas = () => {
+    const router = useRouter();
     const [selectedCount, setSelectedCount] = useState<number>(3);
-    const [isGenerating, setIsGenerating] = useState<boolean>(false);
+    const [error, setError] = useState("");
 
     const handleGenerateRecipes = (): void => {
-        setIsGenerating(true);
-        window.setTimeout(() => {
-            setIsGenerating(false);
-        }, 700);
+        try {
+            getSession();
+            router.push(`/receitas?quantidade=${selectedCount}`);
+        } catch (e) { setError(e instanceof Error ? e.message : "Faça login para continuar."); }
     };
 
     return (
@@ -135,15 +137,15 @@ const TelaSugestaoReceitas = () => {
                         </fieldset>
 
                         <div className="flex flex-col items-center gap-6 relative self-stretch w-full flex-[0_0_auto]">
-                            <Link
-                                href="/receitas"
+                            {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
+                            <button
                                 type="submit"
                                 className="flex items-center justify-center px-0 py-3.5 relative self-stretch w-full flex-[0_0_auto] bg-[#2d5a27] hover:bg-[#23471f] transition-colors rounded-[10px] disabled:cursor-wait disabled:opacity-80 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-[#2d5a27]"
                             >
                                 <span className={`${instrumentSans.className} relative w-fit -mt-px font-semibold text-white text-base tracking-normal leading-[normal]`}>
                                      Gerar receitas
                                 </span>
-                            </Link>
+                            </button>
 
                             <Slogan />
                         </div>

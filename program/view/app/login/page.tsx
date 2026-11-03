@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Lock, Mail, Loader2 } from "lucide-react";
 import Cabecalho from "@/components/Cabecalho";
 import Slogan from "@/components/Slogan";
+import { backend } from "@/util/api";
 
 const TelaLogin = () => {
     const router = useRouter();
@@ -22,22 +23,9 @@ const TelaLogin = () => {
         setErrorMessage("");
 
         try {
-            const response = await fetch("http://localhost:5020/usuarios/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    email: email,
-                    senha: password
-                }),
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.message || "Erro ao realizar o login. Verifique suas credenciais.");
-            }
+            const data = await backend<{ token: string; idUsuario: number }>("usuarios/login", {
+                method: "POST", body: JSON.stringify({ email, senha: password }),
+            }, false);
 
             if (data.token) {
                 localStorage.setItem("authToken", data.token);
@@ -48,8 +36,8 @@ const TelaLogin = () => {
             }
 
             router.push("/navegacao");
-        } catch (error: any) {
-            setErrorMessage(error.message || "Ocorreu um erro inesperado.");
+        } catch (error: unknown) {
+            setErrorMessage(error instanceof Error ? error.message : "Ocorreu um erro inesperado.");
         } finally {
             setIsLoading(false);
         }

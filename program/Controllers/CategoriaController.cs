@@ -1,11 +1,13 @@
 using apiNoWaste.Data;
 using apiNoWaste.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace apiNoWaste.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("categorias")]
 public class CategoriaController : ControllerBase
 {

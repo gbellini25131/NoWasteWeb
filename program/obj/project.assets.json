@@ -1627,11 +1627,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\u25145\\Downloads\\apiNoWaste_MVC\\apiNoWaste\\apiNoWaste.csproj",
+      "projectUniqueName": "C:\\Users\\u25145\\Documents\\program-integrado\\program\\apiNoWaste.csproj",
       "projectName": "apiNoWaste",
-      "projectPath": "C:\\Users\\u25145\\Downloads\\apiNoWaste_MVC\\apiNoWaste\\apiNoWaste.csproj",
+      "projectPath": "C:\\Users\\u25145\\Documents\\program-integrado\\program\\apiNoWaste.csproj",
       "packagesPath": "C:\\Users\\u25145\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\u25145\\Downloads\\apiNoWaste_MVC\\apiNoWaste\\obj\\",
+      "outputPath": "C:\\Users\\u25145\\Documents\\program-integrado\\program\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

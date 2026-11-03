@@ -6,6 +6,7 @@ import { LucideIcon, User, Mail, Lock, Loader2 } from "lucide-react";
 import { fraunces, instrumentSans } from "@/util/Fonts";
 import Cabecalho from "@/components/Cabecalho";
 import Slogan from "@/components/Slogan";
+import { backend, getSession } from "@/util/api";
 
 type FormValues = {
     name: string;
@@ -90,36 +91,16 @@ const TelaEdicaoPerfil = () => {
 
     useEffect(() => {
         const fetchUserData = async () => {
-            const userId = localStorage.getItem("userId");
-            const token = localStorage.getItem("authToken");
-
-            if (!userId) {
-                setErrorMessage("Utilizador não identificado. Por favor, faça login novamente.");
-                return;
-            }
-
             setIsLoading(true);
             try {
-                const response = await fetch(`http://localhost:5020/usuarios/${userId}`, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-                    },
-                });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.message || "Erro ao carregar dados do utilizador.");
-                }
+                const data = await backend<{ nome: string; email: string }>(`usuarios/${getSession().userId}`);
 
                 setFormValues((prev) => ({
                     ...prev,
-                    name: data.nome || data.name || "",
+                    name: data.nome || "",
                     email: data.email || "",
                 }));
-            } catch (error: any) {
+            } catch (error: unknown) {
                 console.error("Erro ao carregar utilizador:", error);
                 setErrorMessage("Não foi possível carregar os dados atuais.");
             } finally {
@@ -155,30 +136,15 @@ const TelaEdicaoPerfil = () => {
         setIsLoading(true);
 
         try {
-            const userId = localStorage.getItem("userId");
-            const token = localStorage.getItem("authToken");
-
-            const response = await fetch(`http://localhost:5020/usuarios/${userId}`, {
+            await backend(`usuarios/${getSession().userId}`, {
                 method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-                },
                 body: JSON.stringify({
                     nome: formValues.name,
                     email: formValues.email,
                     senhaAtual: formValues.currentPassword,
-                    senha: formValues.newPassword || formValues.currentPassword,
+                    senha: formValues.newPassword || null,
                 }),
             });
-
-            const data = await response.json().catch(() => null);
-
-            if (!response.ok) {
-                throw new Error(
-                    data?.message || "Erro ao atualizar perfil. Verifique seus dados."
-                );
-            }
 
             setSuccessMessage("Perfil atualizado com sucesso!");
 
@@ -188,8 +154,8 @@ const TelaEdicaoPerfil = () => {
                 newPassword: "",
                 confirmPassword: "",
             }));
-        } catch (error: any) {
-            setErrorMessage(error.message || "Ocorreu um erro ao atualizar o perfil.");
+        } catch (error: unknown) {
+            setErrorMessage(error instanceof Error ? error.message : "Ocorreu um erro ao atualizar o perfil.");
         } finally {
             setIsLoading(false);
         }

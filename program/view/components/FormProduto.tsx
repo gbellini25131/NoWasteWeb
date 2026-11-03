@@ -4,10 +4,11 @@ import React from "react";
 
 type FormProdutoProps = {
     handleChange : (event : React.ChangeEvent<HTMLInputElement>) => void,
-    product : ProductForm
+    product : ProductForm,
+    categorias?: string[]
 }
 
-const FormProduto = ( {handleChange, product} : FormProdutoProps ) => (
+const FormProduto = ( {handleChange, product, categorias = []} : FormProdutoProps ) => (
     <div className="flex flex-col items-center gap-5 w-full max-w-2xl mx-auto">
         {fieldRows.map((row, rowIndex) => (
             <div
@@ -39,11 +40,18 @@ const FormProduto = ( {handleChange, product} : FormProdutoProps ) => (
                                     id={field.id}
                                     name={field.id}
                                     type={field.type ?? "text"}
+                                    min={field.id === "quantity" ? 1 : undefined}
+                                    step={field.id === "quantity" ? 1 : undefined}
+                                    list={field.id === "category" ? "categorias-disponiveis" : undefined}
+                                    required
                                     value={product[field.id]}
                                     onChange={handleChange}
                                     placeholder={field.placeholder}
                                     aria-label={field.label}
                                 />
+                                {field.id === "category" && <datalist id="categorias-disponiveis">
+                                    {categorias.map((nome) => <option key={nome} value={nome} />)}
+                                </datalist>}
                             </div>
                         </div>
                     );

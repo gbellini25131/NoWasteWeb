@@ -1,15 +1,27 @@
 'use client'
 
-import React, {SyntheticEvent, useState} from "react";
+import React, {SyntheticEvent, useEffect, useState} from "react";
 import Cabecalho from "@/components/Cabecalho";
 import { fraunces, instrumentSans } from "@/util/Fonts";
 import Slogan from "@/components/Slogan";
 import Link from "next/link";
 import {initialProduct, ProductForm} from "@/util/Produto";
 import FormProduto from "@/components/FormProduto";
+import { useRouter } from "next/navigation";
+import { backend, buscarOuCriarCategoria, CategoriaApi, getSession } from "@/util/api";
 
 const TelaAdicaoProduto = () => {
+    const router = useRouter();
     const [product, setProduct] = useState<ProductForm>(initialProduct);
+    const [categorias, setCategorias] = useState<string[]>([]);
+    const [error, setError] = useState("");
+    const [saving, setSaving] = useState(false);
+
+    useEffect(() => {
+        backend<CategoriaApi[]>("categorias")
+            .then((lista) => setCategorias(lista.map((c) => c.nome)))
+            .catch((e: Error) => setError(e.message));
+    }, []);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         const { name, value } = event.target;
@@ -20,8 +32,24 @@ const TelaAdicaoProduto = () => {
         }));
     };
 
-    const handleSubmit = (event: SyntheticEvent): void => {
+    const handleSubmit = async (event: SyntheticEvent): Promise<void> => {
         event.preventDefault();
+        setError("");
+        setSaving(true);
+        try {
+            const { userId } = getSession();
+            const quantidade = Number(product.quantity);
+            if (!Number.isSafeInteger(quantidade) || quantidade <= 0) throw new Error("Informe uma quantidade inteira maior que zero.");
+            const categoria = await buscarOuCriarCategoria(product.category);
+            await backend("produtos", {
+                method: "POST",
+                body: JSON.stringify({ nome: product.name.trim(), idCategoria: categoria.idCategoria,
+                    idUsuario: userId, quantidade, dataValidade: product.expirationDate }),
+            });
+            router.push("/estoque");
+        } catch (e) {
+            setError(e instanceof Error ? e.message : "Não foi possível cadastrar o produto.");
+        } finally { setSaving(false); }
     };
 
     return (
@@ -43,17 +71,19 @@ const TelaAdicaoProduto = () => {
                             </p>
                         </div>
 
-                        <FormProduto handleChange={handleChange} product={product}></FormProduto>
+                        <FormProduto handleChange={handleChange} product={product} categorias={categorias} />
+                        {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
 
                         <div className="flex flex-col items-center gap-4 relative self-stretch w-full flex-[0_0_auto]">
-                            <Link
+                            <button
+                                type="submit"
+                                disabled={saving}
                                 className="flex items-center justify-center px-0 py-3.5 relative self-stretch w-full bg-[#2d5a27] rounded-[10px] cursor-pointer hover:bg-[#23491f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d5a27] focus-visible:ring-offset-2"
-                                href="/estoque"
                             >
                                 <span className="relative w-fit -mt-px font-semibold text-white text-base tracking-normal leading-[normal]">
-                                    Adicionar ao Estoque
+                                    {saving ? "Salvando..." : "Adicionar ao Estoque"}
                                 </span>
-                            </Link>
+                            </button>
                             <Link
                                 className="flex items-center justify-center px-0 py-3 relative self-stretch w-full rounded-[10px] border border-solid border-[#2d5a27] cursor-pointer hover:bg-[#f1f6f1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2d5a27] focus-visible:ring-offset-2"
                                 href="/estoque"

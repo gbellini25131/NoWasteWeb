@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using apiNoWaste.Data;
 using apiNoWaste.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -10,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 namespace apiNoWaste.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("usuarios")]
 public class UsuarioController : ControllerBase
 {
@@ -22,10 +24,13 @@ public class UsuarioController : ControllerBase
         _config = config;
     }
 
+    private int UsuarioAtual => int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
     [HttpGet]
     public async Task<IActionResult> Listar()
     {
         var usuarios = await _db.Usuario
+            .Where(u => u.IdUsuario == UsuarioAtual)
             .Select(u => new { u.IdUsuario, u.Nome, u.Email })
             .ToListAsync();
         return Ok(usuarios);
@@ -34,6 +39,7 @@ public class UsuarioController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> Buscar(int id)
     {
+        if (id != UsuarioAtual) return Forbid();
         var usuario = await _db.Usuario
             .Where(u => u.IdUsuario == id)
             .Select(u => new { u.IdUsuario, u.Nome, u.Email })
@@ -43,6 +49,7 @@ public class UsuarioController : ControllerBase
     }
 
     [HttpPost]
+    [AllowAnonymous]
     public async Task<IActionResult> Criar([FromBody] Usuario usuario)
     {
         if (await _db.Usuario.AnyAsync(u => u.Email == usuario.Email))
@@ -59,10 +66,21 @@ public class UsuarioController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Atualizar(int id, [FromBody] Usuario usuario)
+    public async Task<IActionResult> Atualizar(int id, [FromBody] AtualizacaoUsuario usuario)
     {
+        if (id != UsuarioAtual) return Forbid();
         var dados = await _db.Usuario.FindAsync(id);
         if (dados is null) return NotFound();
+
+        if (string.IsNullOrWhiteSpace(usuario.Nome) || string.IsNullOrWhiteSpace(usuario.Email))
+            return BadRequest("Nome e email são obrigatórios.");
+        if (await _db.Usuario.AnyAsync(u => u.Email == usuario.Email && u.IdUsuario != id))
+            return BadRequest("Já existe um usuário com esse email.");
+
+        if (!string.IsNullOrWhiteSpace(usuario.Senha) &&
+            (string.IsNullOrWhiteSpace(usuario.SenhaAtual) ||
+             !BCrypt.Net.BCrypt.Verify(usuario.SenhaAtual, dados.Senha)))
+            return BadRequest("A senha atual está incorreta.");
 
         dados.Nome = usuario.Nome;
         dados.Email = usuario.Email;
@@ -79,6 +97,7 @@ public class UsuarioController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Excluir(int id)
     {
+        if (id != UsuarioAtual) return Forbid();
         var usuario = await _db.Usuario.FindAsync(id);
         if (usuario is null) return NotFound();
 
@@ -88,6 +107,7 @@ public class UsuarioController : ControllerBase
     }
 
     [HttpPost("login")]
+    [AllowAnonymous]
     public async Task<IActionResult> Entrar([FromBody] Login dados)
     {
         if (string.IsNullOrWhiteSpace(dados.Email) ||
@@ -131,3 +151,5 @@ public class UsuarioController : ControllerBase
         });
     }
 }
+
+public record AtualizacaoUsuario(string Nome, string Email, string? SenhaAtual, string? Senha);

@@ -7,6 +7,7 @@ import { User, Mail, Lock, LucideIcon, Loader2 } from "lucide-react"; // Importa
 import { fraunces, instrumentSans } from "@/util/Fonts";
 import Cabecalho from "@/components/Cabecalho";
 import Slogan from "@/components/Slogan";
+import { backend } from "@/util/api";
 
 type FieldDefinition = {
     id: string;
@@ -81,12 +82,8 @@ const TelaCadastro = () => {
 
         try {
             // 3. Chamada para o endpoint de cadastro de usuários da sua API
-            const response = await fetch("http://localhost:5020/usuarios", {
+            await backend("usuarios", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                // Mapeamento das chaves do formulário para o formato JSON esperado pela sua API
                 body: JSON.stringify({
                     nome: formValues["full-name"],
                     email: formValues.email,
@@ -94,18 +91,10 @@ const TelaCadastro = () => {
                 }),
             });
 
-            const data = await response.json().catch(() => null);
-
-            if (!response.ok) {
-                throw new Error(
-                    data?.message || "Erro ao realizar o cadastro. Verifique os dados e tente novamente."
-                );
-            }
-
-            // 4. Redireciona para a tela de login após cadastrar com sucesso
-            router.push("/navegacao");
-        } catch (error: any) {
-            setErrorMessage(error.message || "Ocorreu um erro inesperado ao cadastrar.");
+            // O cadastro não cria uma sessão. O usuário precisa autenticar-se.
+            router.push("/login");
+        } catch (error: unknown) {
+            setErrorMessage(error instanceof Error ? error.message : "Ocorreu um erro inesperado ao cadastrar.");
         } finally {
             setIsLoading(false);
         }
