@@ -1,0 +1,6 @@
+@apiNoWaste_HostAddress = http://localhost:5020
+
+GET {{apiNoWaste_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
